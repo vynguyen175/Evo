@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+/* Luxury Fashion Brand Design Tokens */
+:root {
+  /* Colors - Soft neutral palette */
+  --color-primary: #0a0a0a;
+  --color-secondary: #525252;
+  --color-muted: #737373;
+  --color-light: #f5f5f4;
+  --color-cream: #faf8f5;
+  --color-beige: #e7e5e4;
+  --color-white: #ffffff;
+  
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  /* Spacing */
+  --container-padding: 1.5rem;
+  --section-spacing: 5rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --container-padding: 3rem;
+    --section-spacing: 8rem;
+  }
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+/* Serif heading utility */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Sans serif body utility */
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Custom letter spacing */
+.tracking-luxury {
+  letter-spacing: 0.15em;
+}
+
+.tracking-wide-custom {
+  letter-spacing: 0.08em;
+}
+
+/* Smooth transitions */
+.transition-luxury {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Elegant hover effect for images */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* Product image hover zoom */
+.product-image-hover {
+  overflow: hidden;
+}
+
+.product-image-hover img {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+.product-image-hover:hover img {
+  transform: scale(1.05);
+}
+
+/* Thin elegant border */
+.border-elegant {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-neutral-900 text-white px-8 py-3 text-sm tracking-wider uppercase;
+  @apply hover:bg-neutral-800 transition-all duration-300;
+  @apply font-normal;
+}
+
+.btn-secondary {
+  @apply bg-transparent border border-neutral-900 text-neutral-900 px-8 py-3 text-sm tracking-wider uppercase;
+  @apply hover:bg-neutral-900 hover:text-white transition-all duration-300;
+  @apply font-normal;
+}
+
+/* Link hover underline animation */
+.link-hover {
+  position: relative;
+}
+
+.link-hover::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+.link-hover:hover::after {
+  width: 100%;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--color-beige);
+  color: var(--color-primary);
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 1px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Animate fade in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+/* Stagger animation for grid items */
+.stagger-animation > * {
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
+.stagger-animation > *:nth-child(7) { animation-delay: 0.7s; }
+.stagger-animation > *:nth-child(8) { animation-delay: 0.8s; }
+
+/* Mobile menu animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease forwards;
+}
+
+/* Image placeholder gradient */
+.image-placeholder {
+  background: linear-gradient(135deg, var(--color-light) 0%, var(--color-beige) 100%);
+}
