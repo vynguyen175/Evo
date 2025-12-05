@@ -14,7 +14,7 @@ export default function Button({
   className = '',
   ...props
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-normal tracking-wider uppercase transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseStyles = 'inline-flex items-center justify-center font-normal tracking-wider uppercase transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer';
   
   const variants = {
     primary: 'bg-neutral-900 text-white hover:bg-neutral-800 border border-neutral-900',

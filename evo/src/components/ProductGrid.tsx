@@ -9,17 +9,17 @@ interface ProductGridProps {
 
 export default function ProductGrid({ products, title, subtitle }: ProductGridProps) {
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-20 md:py-28 lg:py-32">
       {/* Section Header */}
       {(title || subtitle) && (
-        <div className="text-center mb-12 md:mb-16">
+        <div className="text-center mb-14 md:mb-20">
           {subtitle && (
-            <p className="text-xs tracking-widest uppercase text-neutral-500 mb-3">
+            <p className="text-[10px] tracking-[0.25em] uppercase text-neutral-500 mb-4">
               {subtitle}
             </p>
           )}
           {title && (
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-neutral-900">
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-[2.75rem] text-neutral-900 leading-tight">
               {title}
             </h2>
           )}
@@ -27,7 +27,7 @@ export default function ProductGrid({ products, title, subtitle }: ProductGridPr
       )}
 
       {/* Products Grid - Responsive: 2 columns mobile, 3 tablet, 4 desktop */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 stagger-animation">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-14 lg:gap-x-8 lg:gap-y-16 stagger-animation">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
@@ -35,8 +35,8 @@ export default function ProductGrid({ products, title, subtitle }: ProductGridPr
 
       {/* Empty State */}
       {products.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-neutral-500">No products found.</p>
+        <div className="text-center py-20">
+          <p className="text-neutral-500 text-sm tracking-wide">No products found.</p>
         </div>
       )}
     </section>

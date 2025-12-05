@@ -48,7 +48,7 @@ export default function CartPage() {
             <p className="text-neutral-600 mb-8">
               Discover our curated collection of timeless essentials.
             </p>
-            <Link href="/products" className="btn-primary inline-flex items-center justify-center">
+            <Link href="/products" className="btn-primary inline-flex items-center justify-center cursor-pointer">
               Continue Shopping
             </Link>
           </div>
@@ -79,7 +79,7 @@ export default function CartPage() {
                   {/* Product Image */}
                   <Link
                     href={`/products/${product.id}`}
-                    className="relative w-24 h-32 md:w-32 md:h-40 flex-shrink-0 overflow-hidden bg-neutral-100"
+                    className="relative w-24 h-32 md:w-32 md:h-40 flex-shrink-0 overflow-hidden bg-neutral-100 cursor-pointer"
                   >
                     {!imageErrors[product.id] ? (
                       <Image
@@ -106,7 +106,7 @@ export default function CartPage() {
                         </p>
                         <Link
                           href={`/products/${product.id}`}
-                          className="font-serif text-lg text-neutral-900 hover:opacity-70 transition-opacity"
+                          className="font-serif text-lg text-neutral-900 hover:opacity-70 transition-opacity cursor-pointer"
                         >
                           {product.name}
                         </Link>
@@ -121,7 +121,7 @@ export default function CartPage() {
                       <div className="flex items-center border border-neutral-300">
                         <button
                           onClick={() => updateQuantity(product.id, quantity - 1)}
-                          className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors"
+                          className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
                           aria-label="Decrease quantity"
                         >
                           −
@@ -129,7 +129,7 @@ export default function CartPage() {
                         <span className="px-4 py-2 text-sm">{quantity}</span>
                         <button
                           onClick={() => updateQuantity(product.id, quantity + 1)}
-                          className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors"
+                          className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
                           aria-label="Increase quantity"
                         >
                           +
@@ -137,7 +137,7 @@ export default function CartPage() {
                       </div>
                       <button
                         onClick={() => removeFromCart(product.id)}
-                        className="text-sm text-neutral-500 hover:text-neutral-900 underline transition-colors"
+                        className="text-sm text-neutral-500 hover:text-neutral-900 underline transition-colors cursor-pointer"
                       >
                         Remove
                       </button>
@@ -151,7 +151,7 @@ export default function CartPage() {
             <div className="mt-6">
               <button
                 onClick={clearCart}
-                className="text-sm text-neutral-500 hover:text-neutral-900 underline transition-colors"
+                className="text-sm text-neutral-500 hover:text-neutral-900 underline transition-colors cursor-pointer"
               >
                 Clear Cart
               </button>

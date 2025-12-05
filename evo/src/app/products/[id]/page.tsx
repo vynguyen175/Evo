@@ -55,13 +55,13 @@ export default function ProductPage({ params }: ProductPageProps) {
       <nav className="py-6 border-b border-neutral-200">
         <ol className="flex items-center gap-2 text-sm">
           <li>
-            <Link href="/" className="text-neutral-500 hover:text-neutral-900 transition-colors">
+            <Link href="/" className="text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer">
               Home
             </Link>
           </li>
           <li className="text-neutral-300">/</li>
           <li>
-            <Link href="/products" className="text-neutral-500 hover:text-neutral-900 transition-colors">
+            <Link href="/products" className="text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer">
               Shop
             </Link>
           </li>
@@ -101,7 +101,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`relative w-20 h-24 overflow-hidden transition-opacity ${
+                    className={`relative w-20 h-24 overflow-hidden transition-opacity cursor-pointer ${
                       selectedImageIndex === index
                         ? 'ring-1 ring-neutral-900'
                         : 'opacity-60 hover:opacity-100'

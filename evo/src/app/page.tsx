@@ -25,10 +25,10 @@ export default function Home() {
         />
 
         {/* View All Link */}
-        <div className="text-center pb-16">
+        <div className="text-center pb-20 md:pb-24">
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 text-sm tracking-wider uppercase text-neutral-600 hover:text-neutral-900 transition-colors group"
+            className="inline-flex items-center gap-3 text-[11px] tracking-[0.2em] uppercase text-neutral-600 hover:text-neutral-900 transition-colors group cursor-pointer"
           >
             View All Products
             <svg
@@ -50,31 +50,31 @@ export default function Home() {
       </Container>
 
       {/* Brand Story Section */}
-      <section className="bg-neutral-100 py-20 md:py-32">
+      <section className="bg-neutral-100 py-24 md:py-36 lg:py-40">
         <Container>
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 lg:gap-28 items-center">
             <div className="order-2 md:order-1">
-              <span className="text-xs tracking-widest uppercase text-neutral-500 mb-4 block">
+              <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-500 mb-5 block">
                 Our Philosophy
               </span>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-neutral-900 mb-6 leading-tight">
+              <h2 className="font-serif text-3xl md:text-4xl lg:text-[2.75rem] text-neutral-900 mb-7 leading-[1.15]">
                 Effortless Style,
                 <br />
                 Timeless Design
               </h2>
-              <p className="text-neutral-600 leading-relaxed mb-6">
+              <p className="text-neutral-600 leading-[1.8] mb-5 text-[15px]">
                 At ÉVO, we believe in the power of simplicity. Our collections are 
                 thoughtfully designed with a focus on quality materials, impeccable 
                 craftsmanship, and enduring style.
               </p>
-              <p className="text-neutral-600 leading-relaxed mb-8">
+              <p className="text-neutral-600 leading-[1.8] mb-10 text-[15px]">
                 Each piece is created to become a lasting part of your wardrobe—
                 versatile enough for everyday moments, refined enough for special 
                 occasions.
               </p>
               <Link
                 href="/products"
-                className="btn-secondary inline-flex items-center justify-center"
+                className="btn-secondary inline-flex items-center justify-center cursor-pointer"
               >
                 Explore Collection
               </Link>
@@ -96,19 +96,19 @@ export default function Home() {
 
       {/* Categories Section */}
       <Container>
-        <section className="py-20 md:py-32">
-          <div className="text-center mb-12 md:mb-16">
-            <span className="text-xs tracking-widest uppercase text-neutral-500 mb-3 block">
+        <section className="py-24 md:py-36 lg:py-40">
+          <div className="text-center mb-14 md:mb-20">
+            <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-500 mb-4 block">
               Browse By
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-neutral-900">
+            <h2 className="font-serif text-3xl md:text-4xl lg:text-[2.75rem] text-neutral-900">
               Categories
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
             {/* Category 1 */}
-            <Link href="/products?category=Tops" className="group relative aspect-[3/4] overflow-hidden">
+            <Link href="/products?category=Tops" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
               <Image
                 src="https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80"
                 alt="Tops category"
@@ -125,7 +125,7 @@ export default function Home() {
             </Link>
 
             {/* Category 2 */}
-            <Link href="/products?category=Dresses" className="group relative aspect-[3/4] overflow-hidden">
+            <Link href="/products?category=Dresses" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
               <Image
                 src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80"
                 alt="Dresses category"
@@ -142,7 +142,7 @@ export default function Home() {
             </Link>
 
             {/* Category 3 */}
-            <Link href="/products?category=Jackets%20%26%20Coats" className="group relative aspect-[3/4] overflow-hidden">
+            <Link href="/products?category=Jackets%20%26%20Coats" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
               <Image
                 src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80"
                 alt="Outerwear category"

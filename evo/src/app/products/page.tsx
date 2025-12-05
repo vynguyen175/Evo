@@ -60,7 +60,7 @@ function ProductsContent() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 text-sm tracking-wider uppercase transition-all duration-300 ${
+                className={`px-4 py-2 text-sm tracking-wider uppercase transition-all duration-300 cursor-pointer ${
                   selectedCategory === category
                     ? 'bg-neutral-900 text-white'
                     : 'bg-transparent text-neutral-600 hover:text-neutral-900'

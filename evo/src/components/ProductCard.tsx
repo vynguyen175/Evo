@@ -32,10 +32,10 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="group">
+    <div className="group cursor-pointer">
       <Link href={`/products/${product.id}`}>
         {/* Image Container */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100 mb-4">
+        <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100 mb-5">
           {!imageError ? (
             <Image
               src={product.image}
@@ -54,10 +54,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Quick Add Button */}
           <button
             onClick={handleAddToCart}
-            className={`absolute bottom-4 left-4 right-4 py-3 text-center text-sm tracking-wider uppercase transition-all duration-300 ${
+            className={`absolute bottom-5 left-5 right-5 py-3.5 text-center text-[11px] font-medium tracking-[0.15em] uppercase transition-all duration-300 cursor-pointer ${
               isAdding
                 ? 'bg-neutral-900 text-white'
-                : 'bg-white/95 text-neutral-900 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0'
+                : 'bg-white/95 text-neutral-900 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 hover:bg-neutral-900 hover:text-white'
             }`}
           >
             {isAdding ? 'Added ✓' : 'Quick Add'}
@@ -65,14 +65,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Product Info */}
-        <div className="space-y-1">
-          <p className="text-xs tracking-wider uppercase text-neutral-500">
+        <div className="space-y-1.5">
+          <p className="text-[10px] tracking-[0.2em] uppercase text-neutral-500">
             {product.category}
           </p>
-          <h3 className="font-serif text-lg text-neutral-900 group-hover:opacity-70 transition-opacity">
+          <h3 className="font-serif text-base md:text-lg text-neutral-900 group-hover:opacity-70 transition-opacity leading-snug">
             {product.name}
           </h3>
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-neutral-700 pt-0.5">
             {formatPrice(product.price)}
           </p>
         </div>

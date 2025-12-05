@@ -112,15 +112,15 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Button styles */
 .btn-primary {
-  @apply bg-neutral-900 text-white px-8 py-3 text-sm tracking-wider uppercase;
+  @apply bg-neutral-900 text-white px-10 py-4 text-[11px] tracking-[0.2em] uppercase;
   @apply hover:bg-neutral-800 transition-all duration-300;
-  @apply font-normal;
+  @apply font-medium cursor-pointer;
 }
 
 .btn-secondary {
-  @apply bg-transparent border border-neutral-900 text-neutral-900 px-8 py-3 text-sm tracking-wider uppercase;
+  @apply bg-transparent border border-neutral-900 text-neutral-900 px-10 py-4 text-[11px] tracking-[0.2em] uppercase;
   @apply hover:bg-neutral-900 hover:text-white transition-all duration-300;
-  @apply font-normal;
+  @apply font-medium cursor-pointer;
 }
 
 /* Link hover underline animation */
@@ -215,6 +215,22 @@ h1, h2, h3, h4, h5, h6 {
 
 .animate-slide-in {
   animation: slideIn 0.3s ease forwards;
+}
+
+/* Slide down animation for search modal */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease forwards;
 }
 
 /* Image placeholder gradient */
