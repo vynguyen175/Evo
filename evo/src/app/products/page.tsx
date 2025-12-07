@@ -1,53 +1,80 @@
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import Container from '@/components/ui/Container';
 import ProductGrid from '@/components/ProductGrid';
-import { products, categories } from '@/data/products';
+import { Product, Category } from '@/types/product';
+import { fetchProducts, fetchCategories } from '@/lib/api';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
 function ProductsContent() {
   const searchParams = useSearchParams();
   const categoryFromUrl = searchParams.get('category');
+  const searchFromUrl = searchParams.get('search');
   
+  const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>(['All']);
   const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl || 'All');
   const [sortBy, setSortBy] = useState<string>('featured');
+  const [isLoading, setIsLoading] = useState(true);
+  const [total, setTotal] = useState(0);
 
-  const filteredProducts = useMemo(() => {
-    let filtered = selectedCategory === 'All' 
-      ? [...products] 
-      : products.filter(p => p.category === selectedCategory);
-
-    // Sort products
-    switch (sortBy) {
-      case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      default:
-        // featured - keep original order
-        break;
+  // Fetch categories on mount
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const response = await fetchCategories();
+        if (response.success && response.data) {
+          const categoryNames = response.data.map((c: Category) => c.name);
+          // Use Set to ensure unique categories, then add 'All' at the start
+          const uniqueCategories = [...new Set(['All', ...categoryNames.filter((name: string) => name !== 'All')])];
+          setCategories(uniqueCategories);
+        }
+      } catch (error) {
+        console.error('Failed to load categories:', error);
+      }
     }
+    loadCategories();
+  }, []);
 
-    return filtered;
-  }, [selectedCategory, sortBy]);
+  // Fetch products when filters change
+  useEffect(() => {
+    async function loadProducts() {
+      setIsLoading(true);
+      try {
+        const response = await fetchProducts({
+          category: selectedCategory !== 'All' ? selectedCategory : undefined,
+          search: searchFromUrl || undefined,
+          sort: sortBy,
+          limit: 50
+        });
+        
+        if (response.success) {
+          setProducts(response.data);
+          setTotal(response.pagination.total);
+        }
+      } catch (error) {
+        console.error('Failed to load products:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadProducts();
+  }, [selectedCategory, sortBy, searchFromUrl]);
 
   return (
     <Container>
       {/* Page Header */}
       <div className="py-12 md:py-16 text-center border-b border-neutral-200">
         <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 mb-4">
-          Shop All
+          {searchFromUrl ? `Search: "${searchFromUrl}"` : 'Shop All'}
         </h1>
         <p className="text-neutral-600 max-w-xl mx-auto">
-          Discover our collection of timeless essentials, designed with quality 
-          and elegance in mind.
+          {searchFromUrl 
+            ? `Found ${total} ${total === 1 ? 'result' : 'results'}`
+            : 'Discover our collection of timeless essentials, designed with quality and elegance in mind.'
+          }
         </p>
       </div>
 
@@ -56,9 +83,9 @@ function ProductsContent() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           {/* Category Filter */}
           <div className="flex flex-wrap gap-2 md:gap-4">
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <button
-                key={category}
+                key={`category-${index}-${category}`}
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 text-sm tracking-wider uppercase transition-all duration-300 cursor-pointer ${
                   selectedCategory === category
@@ -80,6 +107,7 @@ function ProductsContent() {
               className="text-sm text-neutral-900 bg-transparent border-b border-neutral-300 focus:border-neutral-900 focus:outline-none py-1 px-2 cursor-pointer"
             >
               <option value="featured">Featured</option>
+              <option value="newest">Newest</option>
               <option value="price-low">Price: Low to High</option>
               <option value="price-high">Price: High to Low</option>
               <option value="name">Name</option>
@@ -91,12 +119,19 @@ function ProductsContent() {
       {/* Results Count */}
       <div className="py-4">
         <p className="text-sm text-neutral-500">
-          {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+          {isLoading ? 'Loading...' : `${total} ${total === 1 ? 'product' : 'products'}`}
         </p>
       </div>
 
       {/* Product Grid */}
-      <ProductGrid products={filteredProducts} />
+      {isLoading ? (
+        <div className="py-20 text-center">
+          <div className="inline-block w-8 h-8 border-2 border-neutral-300 border-t-neutral-900 rounded-full animate-spin"></div>
+          <p className="text-neutral-500 mt-4">Loading products...</p>
+        </div>
+      ) : (
+        <ProductGrid products={products} />
+      )}
     </Container>
   );
 }

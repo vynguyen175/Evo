@@ -1,78 +1,101 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Product } from '@/data/products';
-
-export interface CartItem {
-  product: Product;
-  quantity: number;
-}
+import { Product, ProductColor, ProductSize, CartItem } from '@/types/product';
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Product) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  addToCart: (product: Product, color?: ProductColor, size?: ProductSize, quantity?: number) => void;
+  removeFromCart: (productId: string, colorName?: string, sizeName?: string) => void;
+  updateQuantity: (productId: string, colorName: string, sizeName: string, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  isInCart: (productId: string, colorName?: string, sizeName?: string) => boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+// Helper to get cart from localStorage
+const getInitialCart = (): CartItem[] => {
+  if (typeof window === 'undefined') return [];
+  try {
+    const savedCart = localStorage.getItem('evo-cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  } catch {
+    return [];
+  }
+};
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // Load cart from localStorage on mount
+  // Hydrate cart from localStorage after mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        setItems(JSON.parse(savedCart));
-      } catch (e) {
-        console.error('Failed to parse cart from localStorage');
-      }
+    const storedItems = getInitialCart();
+    if (storedItems.length > 0) {
+      setItems(storedItems);
     }
-    setIsLoaded(true);
+    setIsHydrated(true);
   }, []);
 
-  // Save cart to localStorage whenever it changes
+  // Save cart to localStorage whenever it changes (after hydration)
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem('cart', JSON.stringify(items));
+    if (isHydrated) {
+      localStorage.setItem('evo-cart', JSON.stringify(items));
     }
-  }, [items, isLoaded]);
+  }, [items, isHydrated]);
 
-  const addToCart = (product: Product) => {
+  const addToCart = (product: Product, color?: ProductColor, size?: ProductSize, quantity: number = 1) => {
+    // Default to first color and size if not provided
+    const selectedColor = color || product.colors[0];
+    const selectedSize = size || product.sizes.find(s => s.inStock) || product.sizes[0];
+
     setItems(currentItems => {
-      const existingItem = currentItems.find(item => item.product.id === product.id);
-      
-      if (existingItem) {
-        return currentItems.map(item =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
+      const existingIndex = currentItems.findIndex(
+        item => 
+          item.product.id === product.id && 
+          item.selectedColor.name === selectedColor.name && 
+          item.selectedSize.name === selectedSize.name
+      );
+
+      if (existingIndex > -1) {
+        // Update quantity if item exists
+        const newItems = [...currentItems];
+        newItems[existingIndex].quantity += quantity;
+        return newItems;
       }
-      
-      return [...currentItems, { product, quantity: 1 }];
+
+      // Add new item
+      return [...currentItems, { product, quantity, selectedColor, selectedSize }];
     });
   };
 
-  const removeFromCart = (productId: string) => {
-    setItems(currentItems => currentItems.filter(item => item.product.id !== productId));
+  const removeFromCart = (productId: string, colorName?: string, sizeName?: string) => {
+    setItems(currentItems =>
+      currentItems.filter(item => {
+        if (colorName && sizeName) {
+          return !(item.product.id === productId && 
+            item.selectedColor.name === colorName && 
+            item.selectedSize.name === sizeName);
+        }
+        return item.product.id !== productId;
+      })
+    );
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeFromCart(productId);
+  const updateQuantity = (productId: string, colorName: string, sizeName: string, quantity: number) => {
+    if (quantity < 1) {
+      removeFromCart(productId, colorName, sizeName);
       return;
     }
-    
+
     setItems(currentItems =>
       currentItems.map(item =>
-        item.product.id === productId
+        item.product.id === productId && 
+        item.selectedColor.name === colorName && 
+        item.selectedSize.name === sizeName
           ? { ...item, quantity }
           : item
       )
@@ -81,6 +104,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = () => {
     setItems([]);
+  };
+
+  const isInCart = (productId: string, colorName?: string, sizeName?: string) => {
+    return items.some(item => {
+      if (colorName && sizeName) {
+        return item.product.id === productId && 
+          item.selectedColor.name === colorName && 
+          item.selectedSize.name === sizeName;
+      }
+      return item.product.id === productId;
+    });
   };
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -95,7 +129,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         updateQuantity,
         clearCart,
         totalItems,
-        totalPrice
+        totalPrice,
+        isInCart
       }}
     >
       {children}

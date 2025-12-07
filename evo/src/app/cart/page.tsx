@@ -6,6 +6,7 @@ import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import { useCart } from '@/context/CartContext';
 import { useState } from 'react';
+import type { CartItem } from '@/types/product';
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart();
@@ -19,8 +20,13 @@ export default function CartPage() {
     }).format(price);
   };
 
-  const handleImageError = (productId: string) => {
-    setImageErrors(prev => ({ ...prev, [productId]: true }));
+  // Generate unique key for cart item based on product, color, and size
+  const getCartItemKey = (item: CartItem) => {
+    return `${item.product.id}-${item.selectedColor?.name || 'default'}-${item.selectedSize?.name || 'default'}`;
+  };
+
+  const handleImageError = (itemKey: string) => {
+    setImageErrors(prev => ({ ...prev, [itemKey]: true }));
   };
 
   if (items.length === 0) {
@@ -64,6 +70,9 @@ export default function CartPage() {
         <h1 className="font-serif text-4xl md:text-5xl text-neutral-900 text-center">
           Shopping Cart
         </h1>
+        <p className="text-center text-neutral-500 mt-2">
+          {items.length} {items.length === 1 ? 'item' : 'items'}
+        </p>
       </div>
 
       <div className="py-12">
@@ -71,80 +80,119 @@ export default function CartPage() {
           {/* Cart Items */}
           <div className="lg:col-span-2">
             <div className="space-y-6">
-              {items.map(({ product, quantity }) => (
-                <div
-                  key={product.id}
-                  className="flex gap-6 py-6 border-b border-neutral-200"
-                >
-                  {/* Product Image */}
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="relative w-24 h-32 md:w-32 md:h-40 flex-shrink-0 overflow-hidden bg-neutral-100 cursor-pointer"
+              {items.map((item) => {
+                const { product, quantity, selectedColor, selectedSize } = item;
+                const itemKey = getCartItemKey(item);
+                
+                // Get the image for the selected color if available, fallback to first image or thumbnail
+                const displayImage = selectedColor?.image || product.images[0] || product.thumbnail;
+                
+                // Get the color hex for display
+                const colorHex = selectedColor?.hex || null;
+
+                return (
+                  <div
+                    key={itemKey}
+                    className="flex gap-6 py-6 border-b border-neutral-200"
                   >
-                    {!imageErrors[product.id] ? (
-                      <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover hover:opacity-80 transition-opacity"
-                        sizes="128px"
-                        onError={() => handleImageError(product.id)}
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-neutral-400 text-xs">No image</span>
-                      </div>
-                    )}
-                  </Link>
+                    {/* Product Image */}
+                    <Link
+                      href={`/products/${product.id}`}
+                      className="relative w-24 h-32 md:w-32 md:h-40 flex-shrink-0 overflow-hidden bg-neutral-100 cursor-pointer"
+                    >
+                      {!imageErrors[itemKey] ? (
+                        <Image
+                          src={displayImage}
+                          alt={product.name}
+                          fill
+                          className="object-cover hover:opacity-80 transition-opacity"
+                          sizes="128px"
+                          onError={() => handleImageError(itemKey)}
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-neutral-400 text-xs">No image</span>
+                        </div>
+                      )}
+                    </Link>
 
-                  {/* Product Details */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between gap-4">
-                      <div>
-                        <p className="text-xs tracking-widest uppercase text-neutral-500 mb-1">
-                          {product.category}
-                        </p>
-                        <Link
-                          href={`/products/${product.id}`}
-                          className="font-serif text-lg text-neutral-900 hover:opacity-70 transition-opacity cursor-pointer"
-                        >
-                          {product.name}
-                        </Link>
+                    {/* Product Details */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between gap-4">
+                        <div>
+                          <p className="text-xs tracking-widest uppercase text-neutral-500 mb-1">
+                            {product.category}
+                          </p>
+                          <Link
+                            href={`/products/${product.id}`}
+                            className="font-serif text-lg text-neutral-900 hover:opacity-70 transition-opacity cursor-pointer"
+                          >
+                            {product.name}
+                          </Link>
+                          
+                          {/* Color & Size Selection */}
+                          <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-neutral-600">
+                            {selectedColor && (
+                              <div className="flex items-center gap-1.5">
+                                {colorHex && (
+                                  <span 
+                                    className="w-3 h-3 rounded-full border border-neutral-300"
+                                    style={{ backgroundColor: colorHex }}
+                                  />
+                                )}
+                                <span>{selectedColor.name}</span>
+                              </div>
+                            )}
+                            {selectedColor && selectedSize && (
+                              <span className="text-neutral-300">|</span>
+                            )}
+                            {selectedSize && (
+                              <span>Size: {selectedSize.name}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-neutral-900 font-medium whitespace-nowrap">
+                            {formatPrice(product.price * quantity)}
+                          </p>
+                          {quantity > 1 && (
+                            <p className="text-xs text-neutral-500 mt-1">
+                              {formatPrice(product.price)} each
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-neutral-900 font-medium whitespace-nowrap">
-                        {formatPrice(product.price * quantity)}
-                      </p>
-                    </div>
 
-                    {/* Quantity & Remove */}
-                    <div className="mt-4 flex items-center justify-between">
-                      <div className="flex items-center border border-neutral-300">
+                      {/* Quantity & Remove */}
+                      <div className="mt-4 flex items-center justify-between">
+                        <div className="flex items-center border border-neutral-300">
+                          <button
+                            onClick={() => updateQuantity(product.id, selectedColor?.name || '', selectedSize?.name || '', quantity - 1)}
+                            className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
+                            aria-label="Decrease quantity"
+                          >
+                            −
+                          </button>
+                          <span className="px-4 py-2 text-sm">{quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(product.id, selectedColor?.name || '', selectedSize?.name || '', quantity + 1)}
+                            className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
+                            aria-label="Increase quantity"
+                          >
+                            +
+                          </button>
+                        </div>
                         <button
-                          onClick={() => updateQuantity(product.id, quantity - 1)}
-                          className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
-                          aria-label="Decrease quantity"
+                          onClick={() => removeFromCart(product.id, selectedColor?.name, selectedSize?.name)}
+                          className="text-sm text-neutral-500 hover:text-neutral-900 underline transition-colors cursor-pointer"
                         >
-                          −
-                        </button>
-                        <span className="px-4 py-2 text-sm">{quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(product.id, quantity + 1)}
-                          className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
-                          aria-label="Increase quantity"
-                        >
-                          +
+                          Remove
                         </button>
                       </div>
-                      <button
-                        onClick={() => removeFromCart(product.id)}
-                        className="text-sm text-neutral-500 hover:text-neutral-900 underline transition-colors cursor-pointer"
-                      >
-                        Remove
-                      </button>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Clear Cart */}
@@ -203,7 +251,7 @@ export default function CartPage() {
               {/* Continue Shopping */}
               <Link
                 href="/products"
-                className="mt-6 flex items-center justify-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors"
+                className="mt-6 flex items-center justify-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -26,13 +26,13 @@ export default function Hero() {
             New Collection
           </span>
           <h1 className="font-serif text-[2.75rem] md:text-6xl lg:text-7xl text-neutral-900 leading-[1.1] mb-7 md:mb-8">
-            Timeless
+            Modern
             <br />
-            Elegance
+            Luxury
           </h1>
           <p className="text-neutral-600 text-base md:text-lg leading-relaxed mb-10 md:mb-12 max-w-md tracking-wide">
-            Discover our curated collection of elevated essentials. Designed for 
-            those who appreciate refined simplicity.
+            Curated pieces that transcend seasons. Crafted for the discerning 
+            individual who values quality and understated sophistication.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link

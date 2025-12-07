@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { products, Product } from '@/data/products';
+import type { Product } from '@/types/product';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -13,7 +13,9 @@ interface SearchModalProps {
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Product[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Focus input when modal opens
   useEffect(() => {
@@ -41,22 +43,48 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     };
   }, [isOpen, onClose]);
 
-  // Search products
+  // Search products via API with debouncing
+  const searchProducts = useCallback(async (searchQuery: string) => {
+    if (searchQuery.trim() === '') {
+      setResults([]);
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const res = await fetch(`/api/products?search=${encodeURIComponent(searchQuery)}&limit=6`);
+      const data = await res.json();
+      // API returns { success, data, pagination }
+      setResults(data.data || []);
+    } catch (error) {
+      console.error('Search failed:', error);
+      setResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
+
+  // Debounced search
   useEffect(() => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
     if (query.trim() === '') {
       setResults([]);
       return;
     }
 
-    const searchQuery = query.toLowerCase().trim();
-    const filtered = products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(searchQuery) ||
-        product.category.toLowerCase().includes(searchQuery) ||
-        product.description.toLowerCase().includes(searchQuery)
-    );
-    setResults(filtered.slice(0, 6)); // Limit to 6 results
-  }, [query]);
+    debounceRef.current = setTimeout(() => {
+      searchProducts(query);
+    }, 300);
+
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, [query, searchProducts]);
 
   const handleResultClick = () => {
     setQuery('');
@@ -154,6 +182,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   </div>
                 </div>
               </div>
+            ) : isSearching ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-neutral-900 mx-auto mb-4" />
+                <p className="text-neutral-500 text-sm">
+                  Searching...
+                </p>
+              </div>
             ) : results.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-neutral-900 font-serif text-xl mb-2">
@@ -178,7 +213,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     >
                       <div className="relative w-20 h-24 flex-shrink-0 bg-neutral-100 overflow-hidden">
                         <Image
-                          src={product.image}
+                          src={product.thumbnail || product.images[0]}
                           alt={product.name}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"

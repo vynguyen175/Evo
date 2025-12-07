@@ -59,17 +59,19 @@ export default function Navbar() {
         }`}
       >
         <Container>
-          <nav className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <Link
-              href="/"
-              className="font-serif text-2xl md:text-3xl tracking-wide text-neutral-900 hover:opacity-70 transition-opacity"
-            >
-              ÉVO
-            </Link>
+          <nav className="flex items-center h-16 md:h-20">
+            {/* Logo - Fixed width for balance */}
+            <div className="flex-1">
+              <Link
+                href="/"
+                className="font-serif text-2xl md:text-3xl tracking-wide text-neutral-900 hover:opacity-70 transition-opacity"
+              >
+                ÉVO
+              </Link>
+            </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-12">
+            {/* Desktop Navigation - Centered */}
+            <div className="hidden md:flex items-center justify-center gap-12 lg:gap-16">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -81,8 +83,8 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Right Side Icons */}
-            <div className="flex items-center space-x-2 md:space-x-4">
+            {/* Right Side Icons - Fixed width for balance */}
+            <div className="flex-1 flex items-center justify-end space-x-2 md:space-x-4">
               {/* Search Button */}
               <button
                 onClick={() => setIsSearchOpen(true)}

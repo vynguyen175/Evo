@@ -1,13 +1,32 @@
+"use client";
+
 import Hero from '@/components/Hero';
 import ProductGrid from '@/components/ProductGrid';
 import Container from '@/components/ui/Container';
-import { products } from '@/data/products';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import type { Product } from '@/types/product';
 
 export default function Home() {
-  // Get first 8 products for featured section
-  const featuredProducts = products.slice(0, 8);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchFeatured() {
+      try {
+        const res = await fetch('/api/products?limit=8');
+        const data = await res.json();
+        // API returns { success, data, pagination }
+        setFeaturedProducts(data.data || []);
+      } catch (error) {
+        console.error('Failed to fetch featured products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchFeatured();
+  }, []);
 
   return (
     <>
@@ -18,11 +37,17 @@ export default function Home() {
 
       {/* Featured Products */}
       <Container>
-        <ProductGrid
-          products={featuredProducts}
-          title="Curated Essentials"
-          subtitle="Featured Collection"
-        />
+        {loading ? (
+          <div className="py-20 flex justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-900" />
+          </div>
+        ) : (
+          <ProductGrid
+            products={featuredProducts}
+            title="Curated Essentials"
+            subtitle="Featured Collection"
+          />
+        )}
 
         {/* View All Link */}
         <div className="text-center pb-20 md:pb-24">
@@ -82,10 +107,76 @@ export default function Home() {
             <div className="order-1 md:order-2">
               <div className="relative aspect-[4/5] overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1485968579169-e6f79cf4b049?w=800&q=80"
+                  src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800&q=80"
                   alt="Brand story image"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Shop By Gender Section */}
+      <section className="py-12 md:py-16">
+        <Container>
+          <div className="space-y-12 md:space-y-16">
+            {/* For Her */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 shadow-sm">
+              {/* Image Side - Right on desktop */}
+              <div className="relative h-[400px] md:h-[500px] order-2 md:order-1">
+                <Image
+                  src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&q=80"
+                  alt="For Her collection"
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              {/* Text Side - Left on desktop */}
+              <div className="flex flex-col justify-center px-4 md:px-8 py-12 md:py-0 order-1 md:order-2">
+                <Link
+                  href="/products?category=womens"
+                  className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase bg-white text-neutral-900 px-6 py-3 hover:bg-neutral-900 hover:text-white transition-all duration-300 w-fit group cursor-pointer font-medium"
+                >
+                  View All Women Styles
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+
+            {/* Decorative Divider */}
+            <div className="flex items-center justify-center py-4">
+              <div className="h-px w-16 bg-neutral-300"></div>
+              <div className="mx-4 h-1.5 w-1.5 rounded-full bg-neutral-400"></div>
+              <div className="h-px w-16 bg-neutral-300"></div>
+            </div>
+
+            {/* For Him */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 shadow-sm">
+              {/* Text Side - Left */}
+              <div className="flex flex-col justify-center px-4 md:px-8 py-12 md:py-0">
+                <Link
+                  href="/products?category=mens"
+                  className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase bg-white text-neutral-900 px-6 py-3 hover:bg-neutral-900 hover:text-white transition-all duration-300 w-fit group cursor-pointer font-medium"
+                >
+                  View All Men Styles
+                  <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+              </div>
+              {/* Image Side - Right */}
+              <div className="relative h-[400px] md:h-[500px]">
+                <Image
+                  src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80"
+                  alt="For Him collection"
+                  fill
+                  className="object-cover object-top"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>

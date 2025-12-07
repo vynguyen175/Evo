@@ -150,7 +150,7 @@ export default function Footer() {
                 />
                 <button
                   type="submit"
-                  className="px-6 py-3 text-sm tracking-wider uppercase bg-neutral-900 text-white hover:bg-neutral-800 transition-colors"
+                  className="px-6 py-3 text-sm tracking-wider uppercase bg-neutral-900 text-white hover:bg-neutral-800 transition-colors cursor-pointer"
                 >
                   Subscribe
                 </button>
@@ -166,13 +166,13 @@ export default function Footer() {
               © {currentYear} ÉVO. All rights reserved.
             </p>
             <div className="flex items-center space-x-6">
-              <Link href="#" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors">
+              <Link href="#" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer">
                 Privacy Policy
               </Link>
-              <Link href="#" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors">
+              <Link href="#" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer">
                 Terms of Service
               </Link>
-              <Link href="#" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors">
+              <Link href="#" className="text-xs text-neutral-500 hover:text-neutral-900 transition-colors cursor-pointer">
                 Cookies
               </Link>
             </div>
