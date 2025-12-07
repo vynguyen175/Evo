@@ -21,6 +21,7 @@ export interface Product {
   details?: string[];
   category: string;
   subcategory?: string;
+  gender?: 'Men' | 'Women' | 'Unisex';
   colors: ProductColor[];
   sizes: ProductSize[];
   images: string[];

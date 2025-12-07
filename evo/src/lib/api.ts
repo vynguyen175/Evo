@@ -14,6 +14,7 @@ export async function fetchProducts(params?: {
   featured?: boolean;
   newArrivals?: boolean;
   bestSellers?: boolean;
+  gender?: string;
 }): Promise<PaginatedResponse<Product>> {
   const searchParams = new URLSearchParams();
   
@@ -25,6 +26,7 @@ export async function fetchProducts(params?: {
   if (params?.featured) searchParams.set('featured', 'true');
   if (params?.newArrivals) searchParams.set('newArrivals', 'true');
   if (params?.bestSellers) searchParams.set('bestSellers', 'true');
+  if (params?.gender) searchParams.set('gender', params.gender);
   
   const response = await fetch(`${API_BASE_URL}/api/products?${searchParams.toString()}`);
   

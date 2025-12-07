@@ -64,6 +64,7 @@ export async function GET(request: NextRequest) {
     const sort = searchParams.get('sort') || 'featured';
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '12');
+    const gender = searchParams.get('gender');
     const featured = searchParams.get('featured');
     const newArrivals = searchParams.get('newArrivals');
     const bestSellers = searchParams.get('bestSellers');
@@ -95,6 +96,11 @@ export async function GET(request: NextRequest) {
           p.subcategory?.toLowerCase() === category.toLowerCase()
         );
       }
+    }
+
+    // Filter by gender when requested
+    if (gender && gender !== 'All') {
+      products = products.filter(p => p.gender?.toLowerCase() === gender.toLowerCase());
     }
     
     // Sort products

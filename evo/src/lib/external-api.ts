@@ -183,6 +183,13 @@ function mapCategory(externalCategory: string): string {
   return categoryMap[externalCategory] || 'Other';
 }
 
+// Map external category to gender bucket
+function mapGender(externalCategory: string): 'Men' | 'Women' | 'Unisex' {
+  if (externalCategory.startsWith('mens-')) return 'Men';
+  if (externalCategory.startsWith('womens-')) return 'Women';
+  return 'Unisex';
+}
+
 // Create slug from title
 function createSlug(title: string): string {
   return title
@@ -210,6 +217,7 @@ export function convertToInternalProduct(external: ExternalProduct): Product {
       `Rating: ${external.rating}/5`
     ].filter(Boolean),
     category: mapCategory(external.category),
+    gender: mapGender(external.category),
     subcategory: external.category,
     colors: generateColors(external),
     sizes: generateSizes(external.category),
