@@ -74,8 +74,17 @@ export default function Home() {
         </div>
       </Container>
 
+      {/* Decorative Divider */}
+      <div className="bg-neutral-50 py-20 md:py-32">
+        <div className="flex items-center justify-center">
+          <div className="h-px flex-1 max-w-xs bg-neutral-300"></div>
+          <div className="mx-6 h-3 w-3 rounded-full bg-neutral-400"></div>
+          <div className="h-px flex-1 max-w-xs bg-neutral-300"></div>
+        </div>
+      </div>
+
       {/* Brand Story Section */}
-      <section className="bg-neutral-100 py-24 md:py-36 lg:py-40">
+      <section className="bg-neutral-100 py-20 md:py-32 lg:py-40">
         <Container>
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 lg:gap-28 items-center">
             <div className="order-2 md:order-1">
@@ -119,14 +128,23 @@ export default function Home() {
         </Container>
       </section>
 
+      {/* Decorative Divider */}
+      <div className="bg-neutral-50 py-20 md:py-32">
+        <div className="flex items-center justify-center">
+          <div className="h-px flex-1 max-w-xs bg-neutral-300"></div>
+          <div className="mx-6 h-3 w-3 rounded-full bg-neutral-400"></div>
+          <div className="h-px flex-1 max-w-xs bg-neutral-300"></div>
+        </div>
+      </div>
+
       {/* Shop By Gender Section */}
-      <section className="py-12 md:py-16">
+      <section className="py-20 md:py-32 lg:py-40">
         <Container>
-          <div className="space-y-12 md:space-y-16">
+          <div className="space-y-16 md:space-y-20 lg:space-y-24">
             {/* For Her */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-white p-8 md:p-10 lg:p-12 shadow-sm">
               {/* Image Side - Right on desktop */}
-              <div className="relative h-[400px] md:h-[500px] order-2 md:order-1">
+              <div className="relative h-[450px] md:h-[550px] order-2 md:order-1">
                 <Image
                   src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800&q=80"
                   alt="For Her collection"
@@ -136,7 +154,7 @@ export default function Home() {
                 />
               </div>
               {/* Text Side - Left on desktop */}
-              <div className="flex flex-col justify-center px-4 md:px-8 py-12 md:py-0 order-1 md:order-2">
+              <div className="flex flex-col justify-center px-6 md:px-10 lg:px-12 py-16 md:py-0 order-1 md:order-2">
                 <Link
                   href="/products?category=womens"
                   className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase bg-white text-neutral-900 px-6 py-3 hover:bg-neutral-900 hover:text-white transition-all duration-300 w-fit group cursor-pointer font-medium"
@@ -150,16 +168,16 @@ export default function Home() {
             </div>
 
             {/* Decorative Divider */}
-            <div className="flex items-center justify-center py-4">
-              <div className="h-px w-16 bg-neutral-300"></div>
-              <div className="mx-4 h-1.5 w-1.5 rounded-full bg-neutral-400"></div>
-              <div className="h-px w-16 bg-neutral-300"></div>
+            <div className="flex items-center justify-center py-6 md:py-8">
+              <div className="h-px flex-1 max-w-xs bg-neutral-300"></div>
+              <div className="mx-6 h-3 w-3 rounded-full bg-neutral-400"></div>
+              <div className="h-px flex-1 max-w-xs bg-neutral-300"></div>
             </div>
 
             {/* For Him */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-white p-8 md:p-10 lg:p-12 shadow-sm">
               {/* Text Side - Left */}
-              <div className="flex flex-col justify-center px-4 md:px-8 py-12 md:py-0">
+              <div className="flex flex-col justify-center px-6 md:px-10 lg:px-12 py-16 md:py-0">
                 <Link
                   href="/products?category=mens"
                   className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase bg-white text-neutral-900 px-6 py-3 hover:bg-neutral-900 hover:text-white transition-all duration-300 w-fit group cursor-pointer font-medium"
@@ -171,7 +189,7 @@ export default function Home() {
                 </Link>
               </div>
               {/* Image Side - Right */}
-              <div className="relative h-[400px] md:h-[500px]">
+              <div className="relative h-[450px] md:h-[550px]">
                 <Image
                   src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80"
                   alt="For Him collection"

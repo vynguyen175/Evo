@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
+import dynamic from "next/dynamic";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -16,6 +17,11 @@ const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
+});
+
+// Dynamic import for Navbar to prevent hydration errors from browser extensions
+const DynamicNavbar = dynamic(() => import("@/components/Navbar"), {
+  ssr: true,
 });
 
 export const metadata: Metadata = {
@@ -35,11 +41,13 @@ export default function RootLayout({
         style={{ fontFamily: 'var(--font-inter), sans-serif' }}
       >
         <CartProvider>
-          <Navbar />
+          <DynamicNavbar />
           <main className="min-h-screen pt-16 md:pt-20">
             {children}
           </main>
-          <Footer />
+          <div className="mt-24 md:mt-32 lg:mt-40">
+            <Footer />
+          </div>
         </CartProvider>
       </body>
     </html>

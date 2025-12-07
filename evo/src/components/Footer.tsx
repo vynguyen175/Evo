@@ -28,9 +28,9 @@ export default function Footer() {
   return (
     <footer className="bg-neutral-100 border-t border-neutral-200 mt-24 md:mt-32">
       <Container>
-        <div className="py-16 md:py-24 lg:py-28">
+        <div className="py-24 md:py-36 lg:py-44">
           {/* Main Footer Content */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 md:gap-24 lg:gap-32">
             {/* Brand Column */}
             <div className="lg:col-span-1">
               <Link
@@ -80,7 +80,7 @@ export default function Footer() {
               <h3 className="text-[10px] font-medium tracking-[0.2em] uppercase text-neutral-900 mb-5">
                 Shop
               </h3>
-              <ul className="space-y-3.5">
+              <ul className="space-y-5">
                 {footerLinks.shop.map((link) => (
                   <li key={link.label}>
                     <Link
@@ -99,7 +99,7 @@ export default function Footer() {
               <h3 className="text-[10px] font-medium tracking-[0.2em] uppercase text-neutral-900 mb-5">
                 Help
               </h3>
-              <ul className="space-y-3.5">
+              <ul className="space-y-5">
                 {footerLinks.help.map((link) => (
                   <li key={link.label}>
                     <Link
@@ -118,7 +118,7 @@ export default function Footer() {
               <h3 className="text-[10px] font-medium tracking-[0.2em] uppercase text-neutral-900 mb-5">
                 About
               </h3>
-              <ul className="space-y-3.5">
+              <ul className="space-y-5">
                 {footerLinks.about.map((link) => (
                   <li key={link.label}>
                     <Link
@@ -134,23 +134,23 @@ export default function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div className="mt-16 md:mt-20 pt-10 border-t border-neutral-200">
+          <div className="mt-24 md:mt-32 pt-16 border-t border-neutral-200">
             <div className="max-w-md">
-              <h3 className="text-[10px] font-medium tracking-[0.2em] uppercase text-neutral-900 mb-3">
+              <h3 className="text-[10px] font-medium tracking-[0.2em] uppercase text-neutral-900 mb-5">
                 Subscribe to our newsletter
               </h3>
-              <p className="text-[13px] text-neutral-600 mb-5 leading-relaxed">
+              <p className="text-[13px] text-neutral-600 mb-8 leading-relaxed">
                 Be the first to know about new collections and exclusive offers.
               </p>
               <form className="flex gap-3">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-3.5 text-sm bg-white border border-neutral-300 focus:border-neutral-900 focus:outline-none transition-colors"
+                  className="flex-1 px-5 py-4 text-sm bg-white border border-neutral-300 focus:border-neutral-900 focus:outline-none transition-colors"
                 />
                 <button
                   type="submit"
-                  className="px-6 py-3 text-sm tracking-wider uppercase bg-neutral-900 text-white hover:bg-neutral-800 transition-colors cursor-pointer"
+                  className="px-8 py-4 text-sm tracking-wider uppercase bg-neutral-900 text-white hover:bg-neutral-800 transition-colors cursor-pointer"
                 >
                   Subscribe
                 </button>

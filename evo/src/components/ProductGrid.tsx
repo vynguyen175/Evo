@@ -9,10 +9,10 @@ interface ProductGridProps {
 
 export default function ProductGrid({ products, title, subtitle }: ProductGridProps) {
   return (
-    <section className="py-20 md:py-28 lg:py-32">
+    <section className="py-24 md:py-36 lg:py-44\">
       {/* Section Header */}
       {(title || subtitle) && (
-        <div className="text-center mb-14 md:mb-20">
+        <div className="text-center mb-16 md:mb-24 lg:mb-32\">
           {subtitle && (
             <p className="text-[10px] tracking-[0.25em] uppercase text-neutral-500 mb-4">
               {subtitle}
@@ -27,7 +27,7 @@ export default function ProductGrid({ products, title, subtitle }: ProductGridPr
       )}
 
       {/* Products Grid - Responsive: 2 columns mobile, 3 tablet, 4 desktop */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-6 md:gap-y-14 lg:gap-x-8 lg:gap-y-16 stagger-animation">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-12 md:gap-x-8 md:gap-y-18 lg:gap-x-10 lg:gap-y-20 stagger-animation">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
