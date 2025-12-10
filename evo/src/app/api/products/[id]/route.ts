@@ -1,66 +1,29 @@
-// Single Product API - GET product by ID or slug
+// Single Product API - GET, PUT, DELETE product by ID or slug
 import { NextRequest, NextResponse } from 'next/server';
-import { 
-  fetchExternalProductById, 
-  fetchExternalProducts,
-  convertToInternalProduct,
-  searchExternalProducts 
-} from '@/lib/external-api';
-import { ApiResponse, Product } from '@/types/product';
+import connectDB from '@/lib/db';
+import Product from '@/models/Product';
+import { ApiResponse, Product as ProductType } from '@/types/product';
+import mongoose from 'mongoose';
+import { transformProduct } from '@/lib/transform';
 
+// GET - Fetch single product by ID or slug
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    await connectDB();
+    
     const { id } = await params;
     
-    let product: Product | null = null;
+    let product;
     
-    // Check if it's an external product ID (format: ext-123)
-    if (id.startsWith('ext-')) {
-      const externalId = parseInt(id.replace('ext-', ''));
-      if (!isNaN(externalId)) {
-        try {
-          const externalProduct = await fetchExternalProductById(externalId);
-          product = convertToInternalProduct(externalProduct);
-        } catch {
-          product = null;
-        }
-      }
+    // Check if it's a valid MongoDB ObjectId
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      product = await Product.findById(id).lean().exec();
     } else {
-      // Try to parse as numeric ID for external API
-      const numericId = parseInt(id);
-      if (!isNaN(numericId)) {
-        try {
-          const externalProduct = await fetchExternalProductById(numericId);
-          product = convertToInternalProduct(externalProduct);
-        } catch {
-          product = null;
-        }
-      } else {
-        // It's a slug - search for the product by name
-        try {
-          // Extract words from slug for search
-          const searchTerms = id.split('-').slice(0, 3).join(' ');
-          const searchResults = await searchExternalProducts(searchTerms, 10);
-          
-          // Find exact slug match
-          const matchingProduct = searchResults.products.find(p => {
-            const converted = convertToInternalProduct(p);
-            return converted.slug === id;
-          });
-          
-          if (matchingProduct) {
-            product = convertToInternalProduct(matchingProduct);
-          } else if (searchResults.products.length > 0) {
-            // Fallback to first result if no exact match
-            product = convertToInternalProduct(searchResults.products[0]);
-          }
-        } catch {
-          product = null;
-        }
-      }
+      // Otherwise, search by slug
+      product = await Product.findOne({ slug: id }).lean().exec();
     }
     
     if (!product) {
@@ -70,15 +33,115 @@ export async function GET(
       );
     }
     
-    const response: ApiResponse<Product> = {
+    // Transform MongoDB document
+    const transformedProduct = transformProduct(product);
+    
+    const response: ApiResponse<ProductType> = {
       success: true,
-      data: product
+      data: transformedProduct
     };
     
     return NextResponse.json(response);
-  } catch {
+  } catch (error) {
+    console.error('GET /api/products/[id] error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch product' },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT - Update product by ID (Admin)
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await connectDB();
+    
+    const { id } = await params;
+    const body = await request.json();
+    
+    // Validate MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid product ID' },
+        { status: 400 }
+      );
+    }
+    
+    // Update product
+    const product = await Product.findByIdAndUpdate(
+      id,
+      { $set: body },
+      { new: true, runValidators: true }
+    ).lean().exec();
+    
+    if (!product) {
+      return NextResponse.json(
+        { success: false, error: 'Product not found' },
+        { status: 404 }
+      );
+    }
+    
+    // Transform response
+    const transformedProduct = transformProduct(product);
+    
+    return NextResponse.json(
+      { success: true, data: transformedProduct, message: 'Product updated successfully' }
+    );
+  } catch (error: unknown) {
+    console.error('PUT /api/products/[id] error:', error);
+    
+    if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
+      return NextResponse.json(
+        { success: false, error: 'Product with this slug already exists' },
+        { status: 409 }
+      );
+    }
+    
+    return NextResponse.json(
+      { success: false, error: 'Failed to update product' },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE - Delete product by ID (Admin)
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await connectDB();
+    
+    const { id } = await params;
+    
+    // Validate MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid product ID' },
+        { status: 400 }
+      );
+    }
+    
+    // Delete product
+    const product = await Product.findByIdAndDelete(id).lean().exec();
+    
+    if (!product) {
+      return NextResponse.json(
+        { success: false, error: 'Product not found' },
+        { status: 404 }
+      );
+    }
+    
+    return NextResponse.json(
+      { success: true, message: 'Product deleted successfully' }
+    );
+  } catch (error) {
+    console.error('DELETE /api/products/[id] error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Failed to delete product' },
       { status: 500 }
     );
   }

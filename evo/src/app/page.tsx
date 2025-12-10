@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section - Full screen */}
-      <div className="-mt-16 md:-mt-20">
+      <div className="-mt-20 md:-mt-24">
         <Hero />
       </div>
 
@@ -156,7 +156,7 @@ export default function Home() {
               {/* Text Side - Left on desktop */}
               <div className="flex flex-col justify-center px-6 md:px-10 lg:px-12 py-16 md:py-0 order-1 md:order-2">
                 <Link
-                  href="/products?category=womens"
+                  href="/products/women"
                   className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase bg-white text-neutral-900 px-6 py-3 hover:bg-neutral-900 hover:text-white transition-all duration-300 w-fit group cursor-pointer font-medium"
                 >
                   View All Women Styles
@@ -179,7 +179,7 @@ export default function Home() {
               {/* Text Side - Left */}
               <div className="flex flex-col justify-center px-6 md:px-10 lg:px-12 py-16 md:py-0">
                 <Link
-                  href="/products?category=mens"
+                  href="/products/men"
                   className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase bg-white text-neutral-900 px-6 py-3 hover:bg-neutral-900 hover:text-white transition-all duration-300 w-fit group cursor-pointer font-medium"
                 >
                   View All Men Styles
@@ -217,7 +217,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 lg:gap-8">
             {/* Category 1 */}
-            <Link href="/products?category=Tops" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
+            <Link href="/products/category/tops" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
               <Image
                 src="https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80"
                 alt="Tops category"
@@ -234,7 +234,7 @@ export default function Home() {
             </Link>
 
             {/* Category 2 */}
-            <Link href="/products?category=Dresses" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
+            <Link href="/products/category/dresses" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
               <Image
                 src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80"
                 alt="Dresses category"
@@ -251,7 +251,7 @@ export default function Home() {
             </Link>
 
             {/* Category 3 */}
-            <Link href="/products?category=Jackets%20%26%20Coats" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
+            <Link href="/products/category/outerwear" className="group relative aspect-[3/4] overflow-hidden cursor-pointer">
               <Image
                 src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80"
                 alt="Outerwear category"

@@ -42,7 +42,7 @@ export default function RootLayout({
       >
         <CartProvider>
           <DynamicNavbar />
-          <main className="min-h-screen pt-16 md:pt-20">
+          <main className="min-h-screen pt-20 md:pt-24">
             {children}
           </main>
           <div className="mt-24 md:mt-32 lg:mt-40">

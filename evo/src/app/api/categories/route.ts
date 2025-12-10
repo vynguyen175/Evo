@@ -1,28 +1,86 @@
-// Categories API - GET all categories
-import { NextResponse } from 'next/server';
-import { ApiResponse, Category } from '@/types/product';
+// Categories API - GET all categories from MongoDB
+import { NextRequest, NextResponse } from 'next/server';
+import connectDB from '@/lib/db';
+import Category from '@/models/Category';
+import { ApiResponse, Category as CategoryType } from '@/types/product';
+import { transformCategory } from '@/lib/transform';
 
-// Fashion-focused categories for our store
-const STORE_CATEGORIES: Category[] = [
-  { id: 'all', name: 'All', slug: 'all', description: 'Browse all products' },
-  { id: 'tops', name: 'Tops', slug: 'tops', description: 'Shirts, blouses, and more' },
-  { id: 'dresses', name: 'Dresses', slug: 'dresses', description: 'Beautiful dresses for any occasion' },
-  { id: 'shoes', name: 'Shoes', slug: 'shoes', description: 'Footwear collection' },
-  { id: 'bags', name: 'Bags', slug: 'bags', description: 'Handbags and accessories' },
-  { id: 'accessories', name: 'Accessories', slug: 'accessories', description: 'Watches, jewelry, and sunglasses' },
-];
-
-export async function GET() {
+// GET - Fetch all categories
+export async function GET(request: NextRequest) {
   try {
-    const response: ApiResponse<Category[]> = {
+    await connectDB();
+    
+    // Fetch all categories from MongoDB
+    const categories = await Category.find({})
+      .sort({ name: 1 })
+      .lean()
+      .exec();
+    
+    // Transform MongoDB documents
+    const transformedCategories = categories.map(transformCategory);
+    
+    const response: ApiResponse<CategoryType[]> = {
       success: true,
-      data: STORE_CATEGORIES
+      data: transformedCategories
     };
     
     return NextResponse.json(response);
-  } catch {
+  } catch (error) {
+    console.error('GET /api/categories error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch categories' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST - Create a new category (Admin)
+export async function POST(request: NextRequest) {
+  try {
+    await connectDB();
+    
+    const body = await request.json();
+    
+    // Validate required fields
+    const { name } = body;
+    
+    if (!name) {
+      return NextResponse.json(
+        { success: false, error: 'Category name is required' },
+        { status: 400 }
+      );
+    }
+    
+    // Generate slug from name if not provided
+    if (!body.slug) {
+      body.slug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+    
+    // Create category
+    const category = await Category.create(body);
+    
+    // Transform response
+    const transformedCategory = transformCategory(category);
+    
+    return NextResponse.json(
+      { success: true, data: transformedCategory, message: 'Category created successfully' },
+      { status: 201 }
+    );
+  } catch (error: unknown) {
+    console.error('POST /api/categories error:', error);
+    
+    if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
+      return NextResponse.json(
+        { success: false, error: 'Category with this name or slug already exists' },
+        { status: 409 }
+      );
+    }
+    
+    return NextResponse.json(
+      { success: false, error: 'Failed to create category' },
       { status: 500 }
     );
   }

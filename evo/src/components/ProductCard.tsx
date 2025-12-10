@@ -43,7 +43,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <div className="group cursor-pointer">
       <Link href={`/products/${product.id}`}>
         {/* Image Container */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-neutral-100 mb-5">
+        <div className="relative aspect-[3/4] overflow-hidden bg-white mb-5">
           {!imageError ? (
             <Image
               src={currentImage}
@@ -54,7 +54,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-neutral-100">
+            <div className="absolute inset-0 flex items-center justify-center bg-neutral-50">
               <span className="text-neutral-400 text-sm">Image unavailable</span>
             </div>
           )}

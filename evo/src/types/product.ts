@@ -1,4 +1,5 @@
 // Product Types - Centralized type definitions
+// Compatible with MongoDB documents
 
 export interface ProductColor {
   name: string;
@@ -11,8 +12,10 @@ export interface ProductSize {
   inStock: boolean;
 }
 
+// Main Product interface - matches MongoDB schema
 export interface Product {
-  id: string;
+  _id?: string; // MongoDB ID
+  id?: string; // Alias for _id (for backward compatibility)
   name: string;
   slug: string;
   price: number;
@@ -32,8 +35,8 @@ export interface Product {
   featured?: boolean;
   newArrival?: boolean;
   bestSeller?: boolean;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export interface CartItem {
@@ -44,11 +47,59 @@ export interface CartItem {
 }
 
 export interface Category {
-  id: string;
+  _id?: string; // MongoDB ID
+  id?: string; // Alias for _id
   name: string;
   slug: string;
   description?: string;
   image?: string;
+  parentCategory?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+// Order Types
+export interface OrderItem {
+  product: string; // Product ID
+  name: string;
+  price: number;
+  quantity: number;
+  selectedColor?: {
+    name: string;
+    hex: string;
+  };
+  selectedSize?: {
+    name: string;
+  };
+  thumbnail: string;
+}
+
+export interface Order {
+  _id?: string;
+  orderNumber: string;
+  customer: {
+    name: string;
+    email: string;
+    phone?: string;
+  };
+  shippingAddress: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+  };
+  items: OrderItem[];
+  subtotal: number;
+  tax: number;
+  shipping: number;
+  total: number;
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded';
+  paymentMethod?: string;
+  notes?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 // API Response Types

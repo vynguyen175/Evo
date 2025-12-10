@@ -11,12 +11,16 @@ export type ProductsContentProps = {
   title?: string;
   description?: string;
   forcedGender?: 'Men' | 'Women';
+  newArrivals?: boolean;
+  forcedCategory?: string;
 };
 
 export default function ProductsContent({
   title = 'Shop All',
   description = 'Discover our collection of timeless essentials, designed with quality and elegance in mind.',
   forcedGender,
+  newArrivals = false,
+  forcedCategory,
 }: ProductsContentProps) {
   const searchParams = useSearchParams();
   const categoryFromUrl = searchParams.get('category');
@@ -24,12 +28,18 @@ export default function ProductsContent({
   const genderFromUrl = searchParams.get('gender');
 
   const effectiveGender = useMemo(() => forcedGender || genderFromUrl || undefined, [forcedGender, genderFromUrl]);
+  const effectiveCategory = useMemo(() => forcedCategory || categoryFromUrl || 'All', [forcedCategory, categoryFromUrl]);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>(['All']);
-  const [selectedCategory, setSelectedCategory] = useState<string>(categoryFromUrl || 'All');
+  const [selectedCategory, setSelectedCategory] = useState<string>(effectiveCategory);
   const [sortBy, setSortBy] = useState<string>('featured');
   const [isLoading, setIsLoading] = useState(true);
   const [total, setTotal] = useState(0);
+
+  // Update selected category when effectiveCategory changes
+  useEffect(() => {
+    setSelectedCategory(effectiveCategory);
+  }, [effectiveCategory]);
 
   // Fetch categories on mount
   useEffect(() => {
@@ -59,6 +69,7 @@ export default function ProductsContent({
           sort: sortBy,
           limit: 50,
           gender: effectiveGender,
+          newArrivals: newArrivals,
         });
 
         if (response.success) {
@@ -72,7 +83,7 @@ export default function ProductsContent({
       }
     }
     loadProducts();
-  }, [selectedCategory, sortBy, searchFromUrl, effectiveGender]);
+  }, [selectedCategory, sortBy, searchFromUrl, effectiveGender, newArrivals]);
 
   const heroTitle = searchFromUrl ? `Search: "${searchFromUrl}"` : title;
   const heroDescription = searchFromUrl
@@ -82,20 +93,22 @@ export default function ProductsContent({
   return (
     <Container>
       {/* Page Header */}
-      <div className="py-12 md:py-16 text-center border-b border-neutral-200">
-        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 mb-4">
-          {heroTitle}
-        </h1>
-        <p className="text-neutral-600 max-w-xl mx-auto">
-          {heroDescription}
-        </p>
+      <div className="pt-32 md:pt-40 pb-12 md:pb-16 border-b border-neutral-200">
+        <div className="w-full flex flex-col items-center justify-center">
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 mb-4 text-center">
+            {heroTitle}
+          </h1>
+          <p className="text-neutral-600 text-center max-w-2xl px-4">
+            {heroDescription}
+          </p>
+        </div>
       </div>
 
       {/* Filters */}
       <div className="py-6 md:py-8 border-b border-neutral-200">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6 w-full">
           {/* Category Filter */}
-          <div className="flex flex-wrap gap-2 md:gap-4">
+          <div className="flex flex-wrap items-center gap-2 md:gap-4 flex-1">
             {categories.map((category, index) => (
               <button
                 key={`category-${index}-${category}`}
@@ -112,12 +125,12 @@ export default function ProductsContent({
           </div>
 
           {/* Sort */}
-          <div className="flex items-center gap-3">
-            <label className="text-sm text-neutral-600">Sort by:</label>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <label className="text-sm text-neutral-600 whitespace-nowrap">Sort by:</label>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="text-sm text-neutral-900 bg-transparent border-b border-neutral-300 focus:border-neutral-900 focus:outline-none py-1 px-2 cursor-pointer"
+              className="text-sm text-neutral-900 bg-transparent border-b border-neutral-300 focus:border-neutral-900 focus:outline-none py-2 px-2 cursor-pointer"
             >
               <option value="featured">Featured</option>
               <option value="newest">Newest</option>

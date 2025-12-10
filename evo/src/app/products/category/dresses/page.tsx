@@ -1,24 +1,25 @@
 import { Suspense } from 'react';
+import ProductsContent from '../../ProductsContent';
 import Container from '@/components/ui/Container';
-import ProductsContent from './ProductsContent';
 
-export default function ProductsPage() {
+export default function DressesPage() {
   return (
     <Suspense
       fallback={
         <Container>
           <div className="py-12 md:py-16 text-center">
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 mb-4">
-              Shop All
+              Dresses
             </h1>
             <p className="text-neutral-600">Loading products...</p>
           </div>
         </Container>
       }
     >
-      <ProductsContent 
-        title="Shop All"
-        description="Curated essentials for every occasion. Explore our complete collection of timeless pieces, from everyday staples to statement items."
+      <ProductsContent
+        title="Dresses"
+        description="Effortlessly elegant dresses for work, weekends, and everything in between."
+        forcedCategory="Dresses"
       />
     </Suspense>
   );

@@ -64,13 +64,13 @@ export default function ProductPage({ params }: ProductPageProps) {
   }, [resolvedParams.id]);
 
   if (notFoundState) {
-    notFound();
+     notFound();
   }
 
   if (isLoading || !product) {
     return (
       <Container>
-        <div className="py-20 text-center">
+        <div className="py-24 md:py-32 text-center">
           <div className="inline-block w-8 h-8 border-2 border-neutral-300 border-t-neutral-900 rounded-full animate-spin"></div>
           <p className="text-neutral-500 mt-4">Loading product...</p>
         </div>

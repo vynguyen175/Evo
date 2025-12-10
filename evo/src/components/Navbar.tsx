@@ -46,7 +46,9 @@ export default function Navbar() {
   const navLinks = [
     { href: '/', label: 'Home' },
     { href: '/products', label: 'Shop' },
-    { href: '/products?category=new', label: 'New Arrivals' },
+    { href: '/new-arrivals', label: 'New Arrivals' },
+    { href: '/products/women', label: 'Women' },
+    { href: '/products/men', label: 'Men' },
   ];
 
   return (

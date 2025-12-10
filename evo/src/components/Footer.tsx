@@ -6,7 +6,7 @@ export default function Footer() {
 
   const footerLinks = {
     aritzia: [
-      { label: 'About Us', href: '#' },
+      { label: 'About Us', href: '/about' },
       { label: 'Careers', href: '#' },
       { label: 'Impact', href: '#' },
       { label: 'Investor Relations', href: '#' },
@@ -19,7 +19,7 @@ export default function Footer() {
       { label: 'Our Services', href: '#' },
     ],
     help: [
-      { label: 'Contact Us', href: '#' },
+      { label: 'Contact Us', href: '/contact' },
       { label: 'Size Guide', href: '#' },
       { label: 'Shipping', href: '#' },
       { label: 'Returns & Exchanges', href: '#' },
@@ -34,9 +34,9 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-white text-neutral-900 mt-24 md:mt-32 border-t border-neutral-200">
+    <footer className="bg-white text-neutral-900 mt-16 md:mt-24 border-t border-neutral-200">
       <Container>
-        <div className="py-24 md:py-32">
+        <div className="py-16 md:py-24">
           {/* Newsletter Section */}
           <div className="mb-20 pb-16 border-b border-neutral-200">
             <div className="max-w-2xl">
@@ -79,8 +79,7 @@ export default function Footer() {
             </Link>
           </div>
 
-          {/* Main Links Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-20 mb-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16 mb-16">
             {/* Social & App */}
             <div>
               <div className="flex items-center gap-5 mb-12">

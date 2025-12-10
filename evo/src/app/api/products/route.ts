@@ -1,61 +1,16 @@
 // Products API - GET all products with filtering, sorting, and pagination
-// Uses external DummyJSON API for real product data
+// MongoDB-backed full-stack API
 import { NextRequest, NextResponse } from 'next/server';
-import { 
-  fetchExternalProducts,
-  fetchExternalProductsByCategory,
-  searchExternalProducts,
-  convertToInternalProduct,
-  FASHION_CATEGORIES
-} from '@/lib/external-api';
-import { PaginatedResponse, Product } from '@/types/product';
+import connectDB from '@/lib/db';
+import Product from '@/models/Product';
+import { PaginatedResponse, Product as ProductType } from '@/types/product';
+import { transformProduct } from '@/lib/transform';
 
-// Cache products in memory for better performance
-let cachedProducts: Product[] | null = null;
-let cacheTimestamp: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-
-async function getProducts(): Promise<Product[]> {
-  const now = Date.now();
-  
-  // Return cached products if still valid
-  if (cachedProducts && (now - cacheTimestamp) < CACHE_DURATION) {
-    return cachedProducts;
-  }
-  
-  // Fetch fresh products from external API
-  const allProducts: Product[] = [];
-  
-  for (const category of FASHION_CATEGORIES) {
-    try {
-      const data = await fetchExternalProductsByCategory(category, 10);
-      const converted = data.products.map(convertToInternalProduct);
-      allProducts.push(...converted);
-    } catch (error) {
-      console.error(`Failed to fetch category ${category}:`, error);
-    }
-  }
-  
-  // Also fetch some general products
-  try {
-    const generalData = await fetchExternalProducts(20, 0);
-    const converted = generalData.products
-      .filter(p => !allProducts.find(ap => ap.id === `ext-${p.id}`))
-      .map(convertToInternalProduct);
-    allProducts.push(...converted);
-  } catch (error) {
-    console.error('Failed to fetch general products:', error);
-  }
-  
-  // Cache the results
-  cachedProducts = allProducts;
-  cacheTimestamp = now;
-  
-  return allProducts;
-}
-
+// GET - Fetch all products with filtering, sorting, and pagination
 export async function GET(request: NextRequest) {
   try {
+    await connectDB();
+    
     const { searchParams } = new URL(request.url);
     
     // Query parameters
@@ -68,71 +23,72 @@ export async function GET(request: NextRequest) {
     const featured = searchParams.get('featured');
     const newArrivals = searchParams.get('newArrivals');
     const bestSellers = searchParams.get('bestSellers');
+    const inStock = searchParams.get('inStock');
     
-    let products: Product[] = [];
+    // Build query filter
+    const filter: Record<string, unknown> = {};
     
-    // If searching, use external search API directly
-    if (search) {
-      try {
-        const searchData = await searchExternalProducts(search, 30);
-        products = searchData.products.map(convertToInternalProduct);
-      } catch {
-        products = [];
-      }
-    } else {
-      // Get cached/fetched products
-      products = await getProducts();
-      
-      // Filter by specific collection
-      if (featured === 'true') {
-        products = products.filter(p => p.featured);
-      } else if (newArrivals === 'true') {
-        products = products.filter(p => p.newArrival);
-      } else if (bestSellers === 'true') {
-        products = products.filter(p => p.bestSeller);
-      } else if (category && category !== 'All') {
-        products = products.filter(p => 
-          p.category.toLowerCase() === category.toLowerCase() ||
-          p.subcategory?.toLowerCase() === category.toLowerCase()
-        );
-      }
+    // Category filter
+    if (category && category !== 'All') {
+      filter.category = { $regex: new RegExp(category, 'i') };
     }
-
-    // Filter by gender when requested
+    
+    // Gender filter
     if (gender && gender !== 'All') {
-      products = products.filter(p => p.gender?.toLowerCase() === gender.toLowerCase());
+      filter.gender = gender;
     }
     
-    // Sort products
+    // Featured/New/Bestseller filters
+    if (featured === 'true') filter.featured = true;
+    if (newArrivals === 'true') filter.newArrival = true;
+    if (bestSellers === 'true') filter.bestSeller = true;
+    if (inStock === 'true') filter.inStock = true;
+    
+    // Search filter (text search on name and description)
+    if (search) {
+      filter.$text = { $search: search };
+    }
+    
+    // Build sort object
+    let sortObj: Record<string, 1 | -1> = {};
     switch (sort) {
       case 'price-low':
-        products.sort((a, b) => a.price - b.price);
+        sortObj = { price: 1 };
         break;
       case 'price-high':
-        products.sort((a, b) => b.price - a.price);
+        sortObj = { price: -1 };
         break;
       case 'name':
-        products.sort((a, b) => a.name.localeCompare(b.name));
+        sortObj = { name: 1 };
         break;
       case 'newest':
-        products.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        sortObj = { createdAt: -1 };
         break;
       default:
-        // Keep featured order (by rating)
-        products.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+        // Featured first, then by date
+        sortObj = { featured: -1, createdAt: -1 };
         break;
     }
     
-    // Pagination
-    const total = products.length;
+    // Count total documents matching filter
+    const total = await Product.countDocuments(filter);
     const totalPages = Math.ceil(total / limit);
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedProducts = products.slice(startIndex, endIndex);
+    const skip = (page - 1) * limit;
     
-    const response: PaginatedResponse<Product> = {
+    // Fetch products
+    const products = await Product.find(filter)
+      .sort(sortObj)
+      .limit(limit)
+      .skip(skip)
+      .lean()
+      .exec();
+    
+    // Transform MongoDB documents to match frontend Product type
+    const transformedProducts = products.map(transformProduct);
+    
+    const response: PaginatedResponse<ProductType> = {
       success: true,
-      data: paginatedProducts,
+      data: transformedProducts,
       pagination: {
         page,
         limit,
@@ -142,9 +98,63 @@ export async function GET(request: NextRequest) {
     };
     
     return NextResponse.json(response);
-  } catch {
+  } catch (error) {
+    console.error('GET /api/products error:', error);
     return NextResponse.json(
       { success: false, error: 'Failed to fetch products' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST - Create a new product (Admin)
+export async function POST(request: NextRequest) {
+  try {
+    await connectDB();
+    
+    const body = await request.json();
+    
+    // Validate required fields
+    const { name, price, description, category, images, thumbnail } = body;
+    
+    if (!name || !price || !description || !category || !images || !thumbnail) {
+      return NextResponse.json(
+        { success: false, error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+    
+    // Generate slug from name if not provided
+    if (!body.slug) {
+      body.slug = name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+    }
+    
+    // Create product
+    const product = await Product.create(body);
+    
+    // Transform response
+    const transformedProduct = transformProduct(product);
+    
+    return NextResponse.json(
+      { success: true, data: transformedProduct, message: 'Product created successfully' },
+      { status: 201 }
+    );
+  } catch (error: unknown) {
+    console.error('POST /api/products error:', error);
+    
+    // Handle duplicate slug error
+    if (error && typeof error === 'object' && 'code' in error && error.code === 11000) {
+      return NextResponse.json(
+        { success: false, error: 'Product with this slug already exists' },
+        { status: 409 }
+      );
+    }
+    
+    return NextResponse.json(
+      { success: false, error: 'Failed to create product' },
       { status: 500 }
     );
   }
