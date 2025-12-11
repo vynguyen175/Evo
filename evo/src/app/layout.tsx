@@ -42,12 +42,12 @@ export default function RootLayout({
       >
         <CartProvider>
           <DynamicNavbar />
-          <main className="min-h-screen pt-20 md:pt-24">
-            {children}
+          <main className="min-h-screen">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              {children}
+            </div>
           </main>
-          <div className="mt-24 md:mt-32 lg:mt-40">
-            <Footer />
-          </div>
+          <Footer />
         </CartProvider>
       </body>
     </html>

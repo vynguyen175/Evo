@@ -54,7 +54,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values Section */}
-      <section className="py-20 md:py-32 bg-neutral-50 -mx-6 px-6 md:-mx-8 md:px-8 lg:-mx-12 lg:px-12">
+      <section className="py-20 md:py-32 bg-neutral-50">
         <div className="text-center mb-16">
           <h2 className="font-serif text-3xl md:text-4xl text-neutral-900 mb-4">
             Our Values

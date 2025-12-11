@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Container from './ui/Container';
 import { useCart } from '@/context/CartContext';
 import SearchModal from './SearchModal';
 
@@ -60,7 +59,7 @@ export default function Navbar() {
             : 'bg-white'
         }`}
       >
-        <Container>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex items-center h-16 md:h-20">
             {/* Logo - Fixed width for balance */}
             <div className="flex-1">
@@ -179,7 +178,7 @@ export default function Navbar() {
               </button>
             </div>
           </nav>
-        </Container>
+        </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (

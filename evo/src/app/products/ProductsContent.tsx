@@ -47,7 +47,13 @@ export default function ProductsContent({
       try {
         const response = await fetchCategories();
         if (response.success && response.data) {
-          const categoryNames = response.data.map((c: Category) => c.name);
+          let categoryNames = response.data.map((c: Category) => c.name);
+          
+          // Filter out "Dresses" for men's page
+          if (effectiveGender === 'Men') {
+            categoryNames = categoryNames.filter((name: string) => name !== 'Dresses');
+          }
+          
           const uniqueCategories = [...new Set(['All', ...categoryNames.filter((name: string) => name !== 'All')])];
           setCategories(uniqueCategories);
         }
@@ -56,7 +62,7 @@ export default function ProductsContent({
       }
     }
     loadCategories();
-  }, []);
+  }, [effectiveGender]);
 
   // Fetch products when filters change
   useEffect(() => {

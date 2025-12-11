@@ -2,7 +2,6 @@
 
 import Hero from '@/components/Hero';
 import ProductGrid from '@/components/ProductGrid';
-import Container from '@/components/ui/Container';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -31,12 +30,10 @@ export default function Home() {
   return (
     <>
       {/* Hero Section - Full screen */}
-      <div className="-mt-20 md:-mt-24">
-        <Hero />
-      </div>
+      <Hero />
 
       {/* Featured Products */}
-      <Container>
+      <div className="mt-20 md:mt-24">
         {loading ? (
           <div className="py-20 flex justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-900" />
@@ -72,7 +69,7 @@ export default function Home() {
             </svg>
           </Link>
         </div>
-      </Container>
+      </div>
 
       {/* Decorative Divider */}
       <div className="bg-neutral-50 py-20 md:py-32">
@@ -85,7 +82,6 @@ export default function Home() {
 
       {/* Brand Story Section */}
       <section className="bg-neutral-100 py-20 md:py-32 lg:py-40">
-        <Container>
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 lg:gap-28 items-center">
             <div className="order-2 md:order-1">
               <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-500 mb-5 block">
@@ -125,7 +121,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </Container>
       </section>
 
       {/* Decorative Divider */}
@@ -139,7 +134,6 @@ export default function Home() {
 
       {/* Shop By Gender Section */}
       <section className="py-20 md:py-32 lg:py-40">
-        <Container>
           <div className="space-y-16 md:space-y-20 lg:space-y-24">
             {/* For Her */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-white p-8 md:p-10 lg:p-12 shadow-sm">
@@ -200,11 +194,9 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </Container>
       </section>
 
       {/* Categories Section */}
-      <Container>
         <section className="py-24 md:py-36 lg:py-40">
           <div className="text-center mb-14 md:mb-20">
             <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-500 mb-4 block">
@@ -268,7 +260,6 @@ export default function Home() {
             </Link>
           </div>
         </section>
-      </Container>
     </>
   );
 }

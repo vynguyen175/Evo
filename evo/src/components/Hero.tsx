@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import Container from './ui/Container';
 
 export default function Hero() {
   return (
-    <section className="relative h-screen min-h-[650px] max-h-[950px] w-full overflow-hidden">
+    <section className="relative h-screen min-h-[650px] max-h-[950px] w-full overflow-hidden -mt-16 md:-mt-20">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -20,8 +19,8 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <Container className="relative h-full flex items-center">
-        <div className="max-w-xl pl-2 md:pl-4">
+      <div className="relative h-full flex items-center">
+        <div className="max-w-xl">
           <span className="inline-block text-[10px] tracking-[0.3em] uppercase text-neutral-600 mb-5 md:mb-6">
             New Collection
           </span>
@@ -49,7 +48,7 @@ export default function Hero() {
             </Link>
           </div>
         </div>
-      </Container>
+      </div>
 
       {/* Scroll Indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">

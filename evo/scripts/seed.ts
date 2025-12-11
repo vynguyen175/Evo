@@ -276,7 +276,7 @@ const products = [
     featured: false,
     newArrival: false,
     bestSeller: true,
-    gender: "Women"
+    gender: "Men"
   },
   {
     name: "Satin Slip Dress",

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Container from './ui/Container';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -34,8 +33,8 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-white text-neutral-900 mt-16 md:mt-24 border-t border-neutral-200">
-      <Container>
+    <footer className="bg-white text-neutral-900 mt-24 md:mt-32 lg:mt-40 border-t border-neutral-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-16 md:py-24">
           {/* Newsletter Section */}
           <div className="mb-20 pb-16 border-b border-neutral-200">
@@ -170,7 +169,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-      </Container>
+      </div>
     </footer>
   );
 }
