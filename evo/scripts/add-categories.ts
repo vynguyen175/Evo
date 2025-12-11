@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 import Category from '../src/models/Category';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://vyn13217:Thaovy1511%26@brainrotcluster.eqmfpgx.mongodb.net/evo?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI!;
 
 const newCategories = [
   {
