@@ -38,7 +38,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   const handleColorClick = (e: React.MouseEvent, index: number) => {
     e.preventDefault();
     e.stopPropagation();
-    
+    setSelectedColorIndex(index);
+    setImageError(false);
+  };
 
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -48,8 +50,6 @@ export default function ProductCard({ product }: ProductCardProps) {
     } else {
       addToWishlist(product);
     }
-  };setSelectedColorIndex(index);
-    setImageError(false);
   };
 
   return (
@@ -75,6 +75,16 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Sale Badge */}
           {discount && (
             <div className="absolute top-3 left-3 bg-red-600 text-white px-2 py-1 text-[10px] tracking-wider uppercase">
+              {discount}% Off
+            </div>
+          )}
+
+          {/* New Arrival Badge */}
+          {product.newArrival && !discount && (
+            <div className="absolute top-3 left-3 bg-neutral-900 text-white px-2 py-1 text-[10px] tracking-wider uppercase">
+              New
+            </div>
+          )}
 
           {/* Wishlist Button */}
           <button
@@ -99,9 +109,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               />
             </svg>
           </button>
-              {discount}% Off
-            </div>
-          )}
 
           {/* New Arrival Badge */}
           {product.newArrival && !discount && (

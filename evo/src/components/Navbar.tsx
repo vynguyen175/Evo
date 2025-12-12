@@ -134,7 +134,7 @@ export default function Navbar() {
                   />
                 </svg>
                 {wishlist.length > 0 && (
-                  <span className="absolute top-0 right-0 bg-neutral-900 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-medium">
+                  <span className="absolute -top-1 -right-1 bg-neutral-900 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-medium">
                     {wishlist.length}
                   </span>
                 )}
