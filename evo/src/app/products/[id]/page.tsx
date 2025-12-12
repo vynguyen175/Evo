@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import ProductGrid from '@/components/ProductGrid';
+import Reviews from '@/components/Reviews';
 import { Product, ProductColor, ProductSize } from '@/types/product';
 import { fetchProductById, fetchProducts, formatPrice, getDiscountPercentage } from '@/lib/api';
 import { useCart } from '@/context/CartContext';
@@ -351,6 +352,11 @@ export default function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      <section className="border-t border-neutral-200">
+        <Reviews productId={product.id || product._id || ''} />
+      </section>
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (

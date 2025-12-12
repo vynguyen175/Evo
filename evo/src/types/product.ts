@@ -1,6 +1,15 @@
 // Product Types - Centralized type definitions
 // Compatible with MongoDB documents
 
+export interface Review {
+  _id?: string;
+  user: string;
+  rating: number;
+  text: string;
+  images?: string[];
+  createdAt: string | Date;
+}
+
 export interface ProductColor {
   name: string;
   hex: string;
@@ -35,6 +44,9 @@ export interface Product {
   featured?: boolean;
   newArrival?: boolean;
   bestSeller?: boolean;
+  reviews?: Review[];
+  averageRating?: number;
+  reviewCount?: number;
   createdAt?: string | Date;
   updatedAt?: string | Date;
 }

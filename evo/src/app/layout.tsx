@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { WishlistProvider } from "@/context/WishlistContext";
 import dynamic from "next/dynamic";
 
 const inter = Inter({
@@ -41,13 +42,15 @@ export default function RootLayout({
         style={{ fontFamily: 'var(--font-inter), sans-serif' }}
       >
         <CartProvider>
-          <DynamicNavbar />
-          <main className="min-h-screen">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              {children}
-            </div>
-          </main>
-          <Footer />
+          <WishlistProvider>
+            <DynamicNavbar />
+            <main className="min-h-screen">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {children}
+              </div>
+            </main>
+            <Footer />
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>

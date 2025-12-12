@@ -7,6 +7,12 @@ import ProductGrid from '@/components/ProductGrid';
 import { Product, Category } from '@/types/product';
 import { fetchProducts, fetchCategories } from '@/lib/api';
 
+interface FilterState {
+  sizes: string[];
+  colors: string[];
+  priceRange: [number, number];
+}
+
 export type ProductsContentProps = {
   title?: string;
   description?: string;
@@ -35,6 +41,30 @@ export default function ProductsContent({
   const [sortBy, setSortBy] = useState<string>('featured');
   const [isLoading, setIsLoading] = useState(true);
   const [total, setTotal] = useState(0);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [filters, setFilters] = useState<FilterState>({
+    sizes: [],
+    colors: [],
+    priceRange: [0, 1000],
+  });
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Extract unique sizes and colors from all products
+  const availableSizes = useMemo(() => {
+    const sizes = new Set<string>();
+    allProducts.forEach(product => {
+      product.sizes.forEach(size => sizes.add(size.name));
+    });
+    return Array.from(sizes).sort();
+  }, [allProducts]);
+
+  const availableColors = useMemo(() => {
+    const colors = new Set<string>();
+    allProducts.forEach(product => {
+      product.colors.forEach(color => colors.add(color.name));
+    });
+    return Array.from(colors).sort();
+  }, [allProducts]);
 
   // Update selected category when effectiveCategory changes
   useEffect(() => {
@@ -73,14 +103,13 @@ export default function ProductsContent({
           category: selectedCategory !== 'All' ? selectedCategory : undefined,
           search: searchFromUrl || undefined,
           sort: sortBy,
-          limit: 50,
+          limit: 100,
           gender: effectiveGender,
           newArrivals: newArrivals,
         });
 
         if (response.success) {
-          setProducts(response.data);
-          setTotal(response.pagination.total);
+          setAllProducts(response.data);
         }
       } catch (error) {
         console.error('Failed to load products:', error);
@@ -90,6 +119,50 @@ export default function ProductsContent({
     }
     loadProducts();
   }, [selectedCategory, sortBy, searchFromUrl, effectiveGender, newArrivals]);
+
+  // Apply client-side filters
+  useEffect(() => {
+    let filtered = [...allProducts];
+
+    // Filter by size
+    if (filters.sizes.length > 0) {
+      filtered = filtered.filter(product =>
+        product.sizes.some(size => filters.sizes.includes(size.name))
+      );
+    }
+
+    // Filter by color
+    if (filters.colors.length > 0) {
+      filtered = filtered.filter(product =>
+        product.colors.some(color => filters.colors.includes(color.name))
+      );
+    }
+
+    // Filter by price range
+    filtered = filtered.filter(
+      product => product.price >= filters.priceRange[0] && product.price <= filters.priceRange[1]
+    );
+
+    setProducts(filtered);
+    setTotal(filtered.length);
+  }, [allProducts, filters]);
+
+  const toggleFilter = (type: 'sizes' | 'colors', value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [type]: prev[type].includes(value)
+        ? prev[type].filter(item => item !== value)
+        : [...prev[type], value],
+    }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      sizes: [],
+      colors: [],
+      priceRange: [0, 1000],
+    });
+  };
 
   const heroTitle = searchFromUrl ? `Search: "${searchFromUrl}"` : title;
   const heroDescription = searchFromUrl
@@ -130,23 +203,137 @@ export default function ProductsContent({
             ))}
           </div>
 
-          {/* Sort */}
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <label className="text-sm text-neutral-600 whitespace-nowrap">Sort by:</label>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="text-sm text-neutral-900 bg-transparent border-b border-neutral-300 focus:border-neutral-900 focus:outline-none py-2 px-2 cursor-pointer"
+          {/* Sort and Filter Button */}
+          <div className="flex items-center gap-4 flex-shrink-0">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="px-4 py-2 text-sm tracking-wider uppercase bg-neutral-100 hover:bg-neutral-200 transition-colors"
             >
-              <option value="featured">Featured</option>
-              <option value="newest">Newest</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="name">Name</option>
-            </select>
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
+            </button>
+            <div className="flex items-center gap-3">
+              <label className="text-sm text-neutral-600 whitespace-nowrap">Sort:</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="text-sm text-neutral-900 bg-transparent border-b border-neutral-300 focus:border-neutral-900 focus:outline-none py-2 px-2 cursor-pointer"
+              >
+                <option value="featured">Featured</option>
+                <option value="newest">Newest</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+                <option value="bestSeller">Best Sellers</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Advanced Filters Panel */}
+      {showFilters && (
+        <div className="py-6 border-b border-neutral-200 bg-neutral-50">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Size Filter */}
+            <div>
+              <h3 className="text-sm font-medium tracking-wider uppercase mb-4">Size</h3>
+              <div className="flex flex-wrap gap-2">
+                {availableSizes.map(size => (
+                  <button
+                    key={size}
+                    onClick={() => toggleFilter('sizes', size)}
+                    className={`px-4 py-2 text-sm border transition-colors ${
+                      filters.sizes.includes(size)
+                        ? 'bg-neutral-900 text-white border-neutral-900'
+                        : 'bg-white text-neutral-600 border-neutral-300 hover:border-neutral-900'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Color Filter */}
+            <div>
+              <h3 className="text-sm font-medium tracking-wider uppercase mb-4">Color</h3>
+              <div className="flex flex-wrap gap-2">
+                {availableColors.map(color => (
+                  <button
+                    key={color}
+                    onClick={() => toggleFilter('colors', color)}
+                    className={`px-4 py-2 text-sm border transition-colors ${
+                      filters.colors.includes(color)
+                        ? 'bg-neutral-900 text-white border-neutral-900'
+                        : 'bg-white text-neutral-600 border-neutral-300 hover:border-neutral-900'
+                    }`}
+                  >
+                    {color}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Price Range Filter */}
+            <div>
+              <h3 className="text-sm font-medium tracking-wider uppercase mb-4">
+                Price Range: ${filters.priceRange[0]} - ${filters.priceRange[1]}
+              </h3>
+              <div className="space-y-4">
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  step="10"
+                  value={filters.priceRange[1]}
+                  onChange={(e) =>
+                    setFilters(prev => ({
+                      ...prev,
+                      priceRange: [prev.priceRange[0], parseInt(e.target.value)],
+                    }))
+                  }
+                  className="w-full accent-neutral-900"
+                />
+                <div className="flex gap-4">
+                  <input
+                    type="number"
+                    min="0"
+                    max={filters.priceRange[1]}
+                    value={filters.priceRange[0]}
+                    onChange={(e) =>
+                      setFilters(prev => ({
+                        ...prev,
+                        priceRange: [parseInt(e.target.value) || 0, prev.priceRange[1]],
+                      }))
+                    }
+                    className="w-full px-3 py-2 text-sm border border-neutral-300 focus:border-neutral-900 focus:outline-none"
+                    placeholder="Min"
+                  />
+                  <input
+                    type="number"
+                    min={filters.priceRange[0]}
+                    max="1000"
+                    value={filters.priceRange[1]}
+                    onChange={(e) =>
+                      setFilters(prev => ({
+                        ...prev,
+                        priceRange: [prev.priceRange[0], parseInt(e.target.value) || 1000],
+                      }))
+                    }
+                    className="w-full px-3 py-2 text-sm border border-neutral-300 focus:border-neutral-900 focus:outline-none"
+                    placeholder="Max"
+                  />
+                </div>
+                <button
+                  onClick={clearFilters}
+                  className="text-sm text-neutral-600 hover:text-neutral-900 underline"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Results Count */}
       <div className="py-4">
