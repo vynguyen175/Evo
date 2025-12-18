@@ -192,7 +192,10 @@ export default function CartPage() {
                           </button>
                         </div>
                         <button
-                          onClick={() => removeFromCart(product.id, selectedColor?.name, selectedSize?.name)}
+                          onClick={() => {
+                            const productId = (product.id || product._id || '') as string;
+                            removeFromCart(productId, selectedColor?.name, selectedSize?.name);
+                          }}
                           className="text-sm text-neutral-500 hover:text-neutral-900 underline transition-colors cursor-pointer"
                         >
                           Remove
