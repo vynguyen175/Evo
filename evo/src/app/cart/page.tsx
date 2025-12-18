@@ -167,9 +167,10 @@ export default function CartPage() {
                         <div className="flex items-center border border-neutral-300">
                           <button
                             onClick={() => {
+                              const productId = (product.id || product._id || '') as string;
                               const colorName = (selectedColor?.name ?? '') as string;
                               const sizeName = (selectedSize?.name ?? '') as string;
-                              updateQuantity(product.id, colorName, sizeName, quantity - 1);
+                              updateQuantity(productId, colorName, sizeName, quantity - 1);
                             }}
                             className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
                             aria-label="Decrease quantity"
@@ -179,9 +180,10 @@ export default function CartPage() {
                           <span className="px-4 py-2 text-sm">{quantity}</span>
                           <button
                             onClick={() => {
+                              const productId = (product.id || product._id || '') as string;
                               const colorName = (selectedColor?.name ?? '') as string;
                               const sizeName = (selectedSize?.name ?? '') as string;
-                              updateQuantity(product.id, colorName, sizeName, quantity + 1);
+                              updateQuantity(productId, colorName, sizeName, quantity + 1);
                             }}
                             className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
                             aria-label="Increase quantity"
