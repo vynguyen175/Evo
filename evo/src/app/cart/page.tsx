@@ -166,7 +166,7 @@ export default function CartPage() {
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex items-center border border-neutral-300">
                           <button
-                            onClick={() => updateQuantity(product.id, selectedColor?.name || '', selectedSize?.name || '', quantity - 1)}
+                            onClick={() => updateQuantity(product.id, selectedColor?.name ?? '', selectedSize?.name ?? '', quantity - 1)}
                             className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
                             aria-label="Decrease quantity"
                           >
@@ -174,7 +174,7 @@ export default function CartPage() {
                           </button>
                           <span className="px-4 py-2 text-sm">{quantity}</span>
                           <button
-                            onClick={() => updateQuantity(product.id, selectedColor?.name || '', selectedSize?.name || '', quantity + 1)}
+                            onClick={() => updateQuantity(product.id, selectedColor?.name ?? '', selectedSize?.name ?? '', quantity + 1)}
                             className="px-3 py-2 text-neutral-600 hover:text-neutral-900 transition-colors cursor-pointer"
                             aria-label="Increase quantity"
                           >
