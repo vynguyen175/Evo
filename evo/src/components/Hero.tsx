@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <section className="relative h-screen min-h-[650px] max-h-[950px] w-screen overflow-hidden -mt-16 md:-mt-20 -mx-4 sm:-mx-6 lg:-mx-8">
+    <section className="relative h-screen min-h-[650px] max-h-[950px] w-full overflow-hidden -mt-16 md:-mt-20">
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
@@ -19,8 +19,9 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="relative h-full flex items-center px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="max-w-xl">
+      <div className="relative h-full flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-xl">
           <span className="inline-block text-[10px] tracking-[0.3em] uppercase text-neutral-600 mb-5 md:mb-6">
             New Collection
           </span>
@@ -46,6 +47,7 @@ export default function Hero() {
             >
               View New Arrivals
             </Link>
+          </div>
           </div>
         </div>
       </div>

@@ -33,7 +33,8 @@ export default function Home() {
       <Hero />
 
       {/* Featured Products */}
-      <div className="mt-20 md:mt-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mt-20 md:mt-24">
         {loading ? (
           <div className="py-20 flex justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-neutral-900" />
@@ -260,6 +261,7 @@ export default function Home() {
             </Link>
           </div>
         </section>
+      </div>
     </>
   );
 }
