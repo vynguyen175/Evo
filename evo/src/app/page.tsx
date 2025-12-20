@@ -48,7 +48,7 @@ export default function Home() {
         )}
 
         {/* View All Link */}
-        <div className="text-center pb-20 md:pb-24">
+        <div className="text-center pb-12 md:pb-16">
           <Link
             href="/products"
             className="inline-flex items-center gap-3 text-[11px] tracking-[0.2em] uppercase text-neutral-600 hover:text-neutral-900 transition-colors group cursor-pointer"
@@ -73,7 +73,7 @@ export default function Home() {
       </div>
 
       {/* Decorative Divider */}
-      <div className="bg-neutral-50 py-20 md:py-32">
+      <div className="bg-neutral-50 py-12 md:py-16">
         <div className="flex items-center justify-center">
           <div className="h-px flex-1 max-w-xs bg-neutral-300"></div>
           <div className="mx-6 h-3 w-3 rounded-full bg-neutral-400"></div>
@@ -82,7 +82,7 @@ export default function Home() {
       </div>
 
       {/* Brand Story Section */}
-      <section className="bg-neutral-100 py-20 md:py-32 lg:py-40">
+      <section className="bg-neutral-100 py-16 md:py-20 lg:py-24">
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 lg:gap-28 items-center">
             <div className="order-2 md:order-1">
               <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-500 mb-5 block">
@@ -134,8 +134,8 @@ export default function Home() {
       </div>
 
       {/* Shop By Gender Section */}
-      <section className="py-20 md:py-32 lg:py-40">
-          <div className="space-y-16 md:space-y-20 lg:space-y-24">
+      <section className="py-16 md:py-20 lg:py-24">
+          <div className="space-y-12 md:space-y-16 lg:space-y-20">
             {/* For Her */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 bg-white p-8 md:p-10 lg:p-12 shadow-sm">
               {/* Image Side - Right on desktop */}
@@ -198,8 +198,8 @@ export default function Home() {
       </section>
 
       {/* Categories Section */}
-        <section className="py-24 md:py-36 lg:py-40">
-          <div className="text-center mb-14 md:mb-20">
+        <section className="py-16 md:py-20 lg:py-24">
+          <div className="text-center mb-12 md:mb-16">
             <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-500 mb-4 block">
               Browse By
             </span>
