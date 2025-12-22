@@ -2,6 +2,7 @@
 
 import Hero from '@/components/Hero';
 import ProductGrid from '@/components/ProductGrid';
+import Newsletter from '@/components/Newsletter';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -262,6 +263,9 @@ export default function Home() {
           </div>
         </section>
       </div>
+
+      {/* Newsletter Section */}
+      <Newsletter />
     </>
   );
 }
