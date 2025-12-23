@@ -32,6 +32,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  max-width: 100%;
 }
 
 *::before,
@@ -42,8 +43,9 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden !important;
-  width: 100%;
+  width: 100vw;
   max-width: 100vw;
+  position: relative;
 }
 
 body {
@@ -56,15 +58,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden !important;
-  width: 100%;
+  width: 100vw;
   max-width: 100vw;
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 #__next,
-main {
-  overflow-x: hidden !important;
-  width: 100%;
+main,
+section,
+div {
   max-width: 100vw;
 }
 
