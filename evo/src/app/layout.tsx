@@ -36,15 +36,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="overflow-x-hidden">
+    <html lang="en" className="overflow-x-hidden" style={{ overflowX: 'hidden', maxWidth: '100vw' }}>
       <body
         className={`${inter.variable} ${cormorant.variable} antialiased overflow-x-hidden`}
-        style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+        style={{ fontFamily: 'var(--font-inter), sans-serif', overflowX: 'hidden', maxWidth: '100vw' }}
       >
         <CartProvider>
           <WishlistProvider>
             <DynamicNavbar />
-            <main className="min-h-screen">
+            <main className="min-h-screen" style={{ overflowX: 'hidden', maxWidth: '100vw' }}>
               {children}
             </main>
             <Footer />
