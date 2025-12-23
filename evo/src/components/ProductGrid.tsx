@@ -9,7 +9,7 @@ interface ProductGridProps {
 
 export default function ProductGrid({ products, title, subtitle }: ProductGridProps) {
   return (
-    <section className="py-16 md:py-24 lg:py-32">
+    <section className="py-16 md:py-24 lg:py-32 overflow-x-clip w-full">
       {(title || subtitle) && (
         <div className="text-center mb-12 md:mb-16 lg:mb-20">
           {subtitle && (
@@ -25,7 +25,7 @@ export default function ProductGrid({ products, title, subtitle }: ProductGridPr
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-14 lg:gap-x-10 lg:gap-y-16">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8 w-full">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
