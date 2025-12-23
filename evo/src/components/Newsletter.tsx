@@ -24,7 +24,7 @@ export default function Newsletter() {
       
       if (data.success) {
         setStatus('success');
-        setMessage('Successfully subscribed! Check your email.');
+        setMessage('Successfully subscribed!');
         setEmail('');
       } else {
         setStatus('error');
@@ -45,22 +45,25 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="bg-neutral-900 text-white py-16 md:py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <span className="text-[10px] tracking-[0.3em] uppercase text-neutral-400 mb-4 block">
-            Stay Connected
-          </span>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl mb-6">
-            Join Our Community
-          </h2>
-          <p className="text-neutral-300 mb-10 text-base md:text-lg">
-            Be the first to know about new arrivals, exclusive offers, and style inspiration.
-          </p>
+    <section className="w-full bg-neutral-900 text-white py-20 md:py-24">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-xl mx-auto text-center">
+          {/* Heading */}
+          <div className="mb-10">
+            <span className="text-[10px] tracking-[0.3em] uppercase text-neutral-400 mb-3 block">
+              Stay Connected
+            </span>
+            <h2 className="font-serif text-3xl md:text-4xl mb-4">
+              Join Our Community
+            </h2>
+            <p className="text-neutral-400 text-sm md:text-base leading-relaxed">
+              Be the first to know about new arrivals, exclusive offers, and style inspiration.
+            </p>
+          </div>
 
           {/* Email Form */}
-          <form onSubmit={handleEmailSubmit} className="mb-6">
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <form onSubmit={handleEmailSubmit} className="mb-8">
+            <div className="flex flex-col sm:flex-row gap-3">
               <input
                 type="email"
                 value={email}
@@ -68,12 +71,12 @@ export default function Newsletter() {
                 placeholder="Enter your email"
                 required
                 disabled={loading}
-                className="flex-1 px-5 py-3 bg-white/10 border border-white/20 text-white placeholder-neutral-400 focus:outline-none focus:border-white/40 transition-colors disabled:opacity-50"
+                className="flex-1 px-5 py-3.5 bg-white/10 border border-white/20 text-white placeholder-neutral-500 focus:outline-none focus:border-white/50 focus:bg-white/[0.15] transition-all disabled:opacity-50 text-sm"
               />
               <button
                 type="submit"
                 disabled={loading}
-                className="px-8 py-3 bg-white text-neutral-900 font-medium text-sm tracking-wide hover:bg-neutral-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-10 py-3.5 bg-white text-neutral-900 font-medium text-sm tracking-wide hover:bg-neutral-100 active:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
               >
                 {loading ? 'Subscribing...' : 'Subscribe'}
               </button>
@@ -81,16 +84,16 @@ export default function Newsletter() {
           </form>
 
           {/* Divider */}
-          <div className="flex items-center gap-4 max-w-md mx-auto mb-6">
+          <div className="flex items-center gap-4 mb-8">
             <div className="flex-1 h-px bg-white/20"></div>
-            <span className="text-xs text-neutral-400 uppercase tracking-wider">Or</span>
+            <span className="text-xs text-neutral-500 uppercase tracking-widest px-2">Or</span>
             <div className="flex-1 h-px bg-white/20"></div>
           </div>
 
           {/* Google Sign In Button */}
           <button
             onClick={handleGoogleSignIn}
-            className="inline-flex items-center gap-3 px-6 py-3 bg-white text-neutral-900 hover:bg-neutral-100 transition-colors font-medium"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-white text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 transition-colors font-medium text-sm"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
@@ -116,10 +119,10 @@ export default function Newsletter() {
           {/* Message */}
           {message && (
             <div
-              className={`mt-6 p-4 text-sm ${
+              className={`mt-6 p-4 text-sm rounded ${
                 status === 'success'
-                  ? 'bg-green-500/10 border border-green-500/20 text-green-400'
-                  : 'bg-red-500/10 border border-red-500/20 text-red-400'
+                  ? 'bg-green-500/10 border border-green-500/30 text-green-400'
+                  : 'bg-red-500/10 border border-red-500/30 text-red-400'
               }`}
             >
               {message}
@@ -127,7 +130,7 @@ export default function Newsletter() {
           )}
 
           {/* Privacy Note */}
-          <p className="mt-8 text-xs text-neutral-500">
+          <p className="mt-8 text-xs text-neutral-600 leading-relaxed">
             By subscribing, you agree to receive marketing emails. You can unsubscribe at any time.
           </p>
         </div>
