@@ -84,18 +84,19 @@ export default function Newsletter() {
           </form>
 
           {/* Divider */}
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-white/20"></div>
-            <span className="text-xs text-neutral-500 uppercase tracking-widest px-2">Or</span>
-            <div className="flex-1 h-px bg-white/20"></div>
+          <div className="flex items-center gap-4 mb-8 max-w-lg mx-auto">
+            <div className="flex-1 h-px bg-white/30"></div>
+            <span className="text-xs text-neutral-400 uppercase tracking-widest px-2">Or</span>
+            <div className="flex-1 h-px bg-white/30"></div>
           </div>
 
           {/* Google Sign In Button */}
-          <button
-            onClick={handleGoogleSignIn}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-white text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 transition-colors font-medium text-sm"
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24">
+          <div className="text-center">
+            <button
+              onClick={handleGoogleSignIn}
+              className="inline-flex items-center justify-center gap-3 px-8 py-3.5 bg-white text-neutral-900 hover:bg-neutral-100 active:bg-neutral-200 transition-colors font-medium text-sm"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path
                 fill="currentColor"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -115,14 +116,15 @@ export default function Newsletter() {
             </svg>
             Continue with Google
           </button>
+          </div>
 
           {/* Message */}
           {message && (
             <div
-              className={`mt-6 p-4 text-sm rounded ${
+              className={`mt-6 p-4 text-sm rounded text-center max-w-lg mx-auto ${
                 status === 'success'
-                  ? 'bg-green-500/10 border border-green-500/30 text-green-400'
-                  : 'bg-red-500/10 border border-red-500/30 text-red-400'
+                  ? 'bg-green-500/10 border border-green-500/30 text-green-300'
+                  : 'bg-red-500/10 border border-red-500/30 text-red-300'
               }`}
             >
               {message}
@@ -130,7 +132,7 @@ export default function Newsletter() {
           )}
 
           {/* Privacy Note */}
-          <p className="mt-8 text-xs text-neutral-600 leading-relaxed">
+          <p className="mt-8 text-xs text-neutral-500 leading-relaxed text-center max-w-lg mx-auto">
             By subscribing, you agree to receive marketing emails. You can unsubscribe at any time.
           </p>
         </div>
