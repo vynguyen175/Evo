@@ -10,7 +10,7 @@ export default function WishlistPage() {
 
   return (
     <Container>
-      <div className="pt-32 md:pt-40 pb-16">
+      <div className="pt-44 md:pt-52 pb-16">
         {/* Header */}
         <div className="mb-12 pb-8 border-b border-neutral-200">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -18,7 +18,7 @@ export default function WishlistPage() {
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 mb-4">
                 My Wishlist
               </h1>
-              <p className="text-neutral-600">
+              <p className="text-neutral-600 mt-2">
                 {wishlist.length === 0
                   ? 'Your wishlist is empty'
                   : `${wishlist.length} ${wishlist.length === 1 ? 'item' : 'items'} saved`}

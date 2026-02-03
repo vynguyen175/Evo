@@ -32,7 +32,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <Container>
-        <div className="py-24 md:py-32 text-center">
+        <div className="pt-44 md:pt-52 pb-12 md:pb-16 text-center">
           <div className="max-w-md mx-auto">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@ export default function CartPage() {
 
   return (
     <Container>
-      <div className="py-24 md:py-32 border-b border-neutral-200">
+      <div className="pt-44 md:pt-52 pb-24 md:pb-32 border-b border-neutral-200">
         <h1 className="font-serif text-4xl md:text-5xl text-neutral-900 text-center">
           Shopping Cart
         </h1>

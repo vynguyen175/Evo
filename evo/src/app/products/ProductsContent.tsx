@@ -172,19 +172,19 @@ export default function ProductsContent({
   return (
     <Container>
       {/* Page Header */}
-      <div className="pt-32 md:pt-40 pb-12 md:pb-16 border-b border-neutral-200">
+      <div className="pt-44 md:pt-52 pb-12 md:pb-16 border-b border-neutral-200">
         <div className="w-full flex flex-col items-center justify-center">
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 mb-4 text-center">
+          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 text-center">
             {heroTitle}
           </h1>
-          <p className="text-neutral-600 text-center max-w-2xl px-4">
+          <p className="text-neutral-600 mt-6 md:mt-8 text-center w-full">
             {heroDescription}
           </p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="py-6 md:py-8 border-b border-neutral-200">
+      <div className="pt-20 md:pt-24 pb-6 md:pb-8 border-b border-neutral-200">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 w-full">
           {/* Category Filter */}
           <div className="flex flex-wrap items-center gap-2 md:gap-4 flex-1">

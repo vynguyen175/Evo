@@ -5,13 +5,10 @@ import Link from 'next/link';
 export default function AboutPage() {
   return (
     <Container>
-      <div className="py-24 md:py-32 text-center border-b border-neutral-200">
-        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900 mb-6">
+      <div className="pt-20 md:pt-24 pb-12 md:pb-16 text-center border-b border-neutral-200">
+        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-neutral-900">
           About ÉVO
         </h1>
-        <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-          Redefining modern luxury through timeless design and conscious craftsmanship.
-        </p>
       </div>
 
       {/* Story Section */}
